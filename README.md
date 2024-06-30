@@ -10,6 +10,6 @@ Documentation is under development. To get started using the toolbox, see the fo
 
 Please note that the RPF toolbox requires the following toolboxes:
 
-- Palamedes toolbox (https://www.palamedestoolbox.org/)
-- Optimization toolbox (https://www.mathworks.com/products/optimization.html)
-- meta-d' toolbox (included in the `metad` folder of this repository; see also https://www.columbia.edu/~bsm2105/type2sdt/)
+- [Palamedes toolbox](https://www.palamedestoolbox.org/)
+- [Optimization toolbox](https://www.mathworks.com/products/optimization.html)
+- [meta-d' toolbox](https://www.columbia.edu/~bsm2105/type2sdt/) (included in the `metad` folder of this repository)
