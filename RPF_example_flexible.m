@@ -33,7 +33,7 @@ load trialData_example_discrim.mat
 
 %%%%% F1 settings %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-F1_DV = 2;          % select DV for F1
+F1_DV = 1;          % select DV for F1
                     % 1 = p(correct), 2 = d', 3 = p(response)
 
 F1_fit = 1;         % select fit type for F1
@@ -50,13 +50,13 @@ F1_use_log_PF = 0;  % option for selecting PF based on type of x-axis values
                     
 %%%%% F2 settings %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-F2_DV = 3;          % select DV for F2
+F2_DV = 1;          % select DV for F2
                     % 1 = p(high rating), 2 = mean rating, 3 = meta-d', 4 = type 2 AUC, 5 = RT
 
 F2_DV_respCond = 3; % select DV response condition for F2
                     % 1 = "S1" responses, 2 = "S2" responses, 3 = all responses
 
-F2_fit = 2;         % select fit type for F2
+F2_fit = 1;         % select fit type for F2
                     % 1 = MLE, 2 = SSE, 3 = interp
 
 F2_extrapolate = 1; % options for setting the x-range over which F2 is evaluated  
