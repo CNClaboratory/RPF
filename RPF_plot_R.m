@@ -1,7 +1,7 @@
 function [h, options] = RPF_plot_R(R, options, h)
 % [h, options] = RPF_plot_R(R, options, h)
 %
-% Create a plot of the psychometric function P2 = R(P1).
+% Create a plot of the relative psychometric function P2 = R(P1).
 %
 % INPUTS
 % ------
