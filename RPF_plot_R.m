@@ -1,5 +1,23 @@
-function h = RPF_plot_R(R, options, h)
-% h = RPF_plot_R(R, options)
+function [h, options] = RPF_plot_R(R, options, h)
+% [h, options] = RPF_plot_R(R, options, h)
+%
+% Create a plot of the psychometric function P2 = R(P1).
+%
+% INPUTS
+% ------
+% * R       - the R struct 
+% * options - a struct containing options for controlling the appearance of 
+%             the plot. see "help RPF_plot_update_options" for a full listing of
+%             options. any unspecified settings are set to their default values
+%             with RPF_plot_update_options. if the options input is unspecified 
+%             or empty, then all plot settings are set to their default values.
+% * h       - a handle to the plot or subplot in which the F(x) plot will
+%             be created. if empty or unspecified, a new figure is created.
+%
+% OUTPUTS
+% -------
+% * h       - a handle to the plot 
+% * options - the updated options struct used to make the plot
 
 %% handle inputs
 
@@ -23,12 +41,6 @@ x     = options.R.x_min: .01: options.R.x_max;
 for i_cond = 1:nCond
 
     if isfield(R.info, 'PF') && isa(R.info.PF, 'function_handle') && strcmp('RPF_interp_RPF', func2str(R.info.PF))
-        P1_grain = 1e-4;
-%         P1fit  = R.info.max_P1_at_x_min : P1_grain : R.info.min_P1_at_x_max;
-%         P2fits = RPF_interp_RPF(R, P1fit);
-%         P2fit  = P2fits(i_cond, :);
-
-%         P1fit = R.fit(i_cond).params.P1_sorted_unique(1) : P1_grain : R.fit(i_cond).params.P1_sorted_unique(end);
         P1fit = linspace(R.fit(i_cond).params.P1_sorted_unique(1), R.fit(i_cond).params.P1_sorted_unique(end), 1000);
         P2fit = interp1(R.fit(i_cond).params.P1_sorted_unique, ...
                         R.fit(i_cond).params.P2_sorted_unique, ...
@@ -36,24 +48,14 @@ for i_cond = 1:nCond
                         R.fit(i_cond).params.interp_method);        
         
     else
-        
-%         P1fit = RPF_eval(F1, x); 
-%         P1fit = RPF_eval(F1.fit(i_cond), x); 
-%         R.F1.fit(i_cond).PF( R.F1.fit(i_cond).params, R.F1.fit(i_cond).x_transform(x) );
-        
         P1fit = R.F1.fit(i_cond).PF( R.F1.fit(i_cond).params, R.F1.fit(i_cond).xt_fn(x) );
         P2fit = R.F2.fit(i_cond).PF( R.F2.fit(i_cond).params, R.F2.fit(i_cond).xt_fn(x) );
     end
     
     plot(P1fit, P2fit, ...
          'LineStyle', options.R.lineStyle{i_cond}, ...
-         'LineWidth', options.R.lineWidth{i_cond}, ...
+         'LineWidth', options.R.lineWidth(i_cond), ...
          'Color', options.R.lineColor(i_cond,:) );     
-     
-%     plot(R.F1.fit(i_cond).PF( R.F1.fit(i_cond).params, R.F1.fit(i_cond).x_transform(x) ), ...
-%          R.F2.fit(i_cond).PF( R.F2.fit(i_cond).params, R.F2.fit(i_cond).x_transform(x) ), ...
-%          options.style_fit{i_cond});
-
 end
 
 
@@ -104,7 +106,7 @@ for i_cond = 1:nCond
     plot(P1data, P2data, ...
          'LineStyle', 'none', ...
          'Marker', options.R.marker{i_cond}, ...
-         'MarkerSize', options.R.markerSize{i_cond}, ...
+         'MarkerSize', options.R.markerSize(i_cond), ...
          'Color', options.R.markerColor(i_cond,:) );
 
     
@@ -112,7 +114,7 @@ for i_cond = 1:nCond
         plot(P1data_at_x0, P2data_at_x0, ...
             'LineStyle', 'none', ...
             'Marker', options.R.marker_partial{i_cond}, ...
-            'MarkerSize', options.R.markerSize_partial{i_cond}, ...
+            'MarkerSize', options.R.markerSize_partial(i_cond), ...
             'Color', options.R.markerColor_partial(i_cond,:) );
     end    
     
@@ -124,19 +126,19 @@ end
 %% configure plot settings
 
 % axis labels
-xlabel(options.F{1}.str_P)
-ylabel(options.F{2}.str_P)
+xlabel(options.R.str_P1)
+ylabel(options.R.str_P2)
 
 
 % x-axis limits
 xl = xlim;
 
-if options.F{1}.set_P_lim_min
-    xl(1) = options.F{1}.P_min;
+if options.R.set_P1_lim_min
+    xl(1) = options.R.P1_min;
 end
 
-if options.F{1}.set_P_lim_max
-    xl(2) = options.F{1}.P_max;
+if options.R.set_P1_lim_max
+    xl(2) = options.R.P1_max;
 end
 
 xlim(xl);
@@ -145,12 +147,12 @@ xlim(xl);
 % y-axis limits
 yl = ylim;
 
-if options.F{2}.set_P_lim_min
-    yl(1) = options.F{2}.P_min;
+if options.R.set_P2_lim_min
+    yl(1) = options.R.P2_min;
 end
 
-if options.F{2}.set_P_lim_max
-    yl(2) = options.F{2}.P_max;
+if options.R.set_P2_lim_max
+    yl(2) = options.R.P2_max;
 end
 
 ylim(yl);

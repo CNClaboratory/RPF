@@ -1,5 +1,25 @@
-function h = RPF_plot_Fx(F, options, h)
-% h = RPF_plot_Fx(F, options, h)
+function [h, options] = RPF_plot_Fx(F, options, h)
+% [h, options] = RPF_plot_Fx(F, options, h)
+%
+% Create a plot of the psychometric function P = F(x).
+%
+% INPUTS
+% ------
+% * F       - an F struct 
+% * options - a struct containing options for controlling the appearance of 
+%             the plot. see "help RPF_plot_update_options" for a full listing of
+%             options. any unspecified settings are set to their default values
+%             with RPF_plot_update_options. if the options input is unspecified 
+%             or empty, then all plot settings are set to their default values.
+% * h       - a handle to the plot or subplot in which the F(x) plot will
+%             be created. if empty or unspecified, a new figure is created.
+%
+% OUTPUTS
+% -------
+% * h       - a handle to the plot 
+% * options - the updated options struct used to make the plot
+
+
 
 %% handle inputs
 
@@ -34,14 +54,8 @@ nCond = length(F.info.cond_vals);
 for i_cond = 1:nCond
     plot(xt, P(i_cond, :), ...
          'LineStyle', options.F{i}.lineStyle{i_cond}, ...
-         'LineWidth', options.F{i}.lineWidth{i_cond}, ...
+         'LineWidth', options.F{i}.lineWidth(i_cond), ...
          'Color', options.F{i}.lineColor(i_cond,:) );     
-
-%     plot(F.fit(i_cond).xt_fn(x), ...
-%          F.fit(i_cond).PF( F.fit(i_cond).params, F.fit(i_cond).xt_fn(x) ), ...
-%          'LineStyle', options.F{i}.lineStyle{i_cond}, ...
-%          'LineWidth', options.F{i}.lineWidth{i_cond}, ...
-%          'Color', options.F{i}.lineColor(i_cond,:) );     
 end
 
 % plot data
@@ -50,15 +64,8 @@ for i_cond = 1:nCond
     plot(xt, F.data(i_cond).P, ...
          'LineStyle', 'none', ...
          'Marker', options.F{i}.marker{i_cond}, ...
-         'MarkerSize', options.F{i}.markerSize{i_cond}, ...
+         'MarkerSize', options.F{i}.markerSize(i_cond), ...
          'Color', options.F{i}.markerColor(i_cond,:) );
-
-%     plot(F.fit(i_cond).xt_fn( F.data(i_cond).x ), ...
-%          F.data(i_cond).P, ...
-%          'LineStyle', 'none', ...
-%          'Marker', options.F{i}.marker{i_cond}, ...
-%          'MarkerSize', options.F{i}.markerSize{i_cond}, ...
-%          'Color', options.F{i}.markerColor(i_cond,:) );
 end
 
 
