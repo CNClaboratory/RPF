@@ -697,9 +697,12 @@ elseif isR
       any(strcmp( func2str(R.F2.info.PF), PFs_special ))  
 
         R_new = RPF_structArray2fieldMatrix(R);
-        str_title_param{1} = ['AUC = ['                regexprep(num2str(R_new.fit.AUC', 3), '\s+', ', ') ']'];
-        str_title_param{2} = ['over ' R.F1.info.DV ' = [' regexprep(num2str([R.info.P1_LB, R.info.P1_UB], 2), '\s+', ', ') ']'];
+        str_title_param{1} = ['over ' R.F1.info.DV ' = [' regexprep(num2str([R.info.P1_LB, R.info.P1_UB], 2), '\s+', ', ') '], '];
+        str_title_param{2} = ['AUC = ['                   regexprep(num2str(R_new.fit.AUC', 3), '\s+', ', ') ']'];
+        str_title_param{3} = [R.F2.info.DV '_{avg} = ['   regexprep(num2str(R_new.fit.P2_avg', 3), '\s+', ', ') ']'];
     
+        str_title_AUC = str_title_param;
+        
     % for all other functions, construct the param title
     else
         R_new   = RPF_structArray2fieldMatrix(R);
@@ -708,13 +711,15 @@ elseif isR
         paramR  = paramF2 ./ paramF1;
 
         % set R title
-        str_title_param{1} = ['\alpha_2 / \alpha_1 = ' regexprep(num2str(paramR(:,1)', 2),   '\s+', ', ')];
-        str_title_param{2} = ['\beta_2 / \beta_1 = '   regexprep(num2str(paramR(:,2)', 2),   '\s+', ', ')];
-        str_title_param{3} = ['AUC = ['                regexprep(num2str(R_new.fit.AUC', 3), '\s+', ', ') ']'];
-        str_title_param{4} = ['over ' R.F1.info.DV ' = [' regexprep(num2str([R.info.P1_LB, R.info.P1_UB], 2), '\s+', ', ') ']'];
+        str_title_param{1} = ['\alpha_2 / \alpha_1 = '    regexprep(num2str(paramR(:,1)', 2),   '\s+', ', ')];
+        str_title_param{2} = ['\beta_2 / \beta_1 = '      regexprep(num2str(paramR(:,2)', 2),   '\s+', ', ')];
+        str_title_param{3} = ['over ' R.F1.info.DV ' = [' regexprep(num2str([R.info.P1_LB, R.info.P1_UB], 2), '\s+', ', ') '], '];
+        str_title_param{4} = ['AUC = ['                   regexprep(num2str(R_new.fit.AUC', 3), '\s+', ', ') ']'];
+        str_title_param{5} = [R.F2.info.DV '_{avg} = ['   regexprep(num2str(R_new.fit.P2_avg', 3), '\s+', ', ') ']'];
 
         str_title_AUC{1} = str_title_param{3};
         str_title_AUC{2} = str_title_param{4};
+        str_title_AUC{3} = str_title_param{5};
         
     end
     

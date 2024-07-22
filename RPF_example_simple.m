@@ -90,10 +90,9 @@ P1_UB = []; % upper bound for AUC. if empty, defaults to max possible value in R
 R     = RPF_get_R(F1, F2, P1_LB, P1_UB);
 
 % plot RPF analysis
-options.all.set_title_param = 0;
-options.F{1}.default_legend = 1;
+options.all.set_title_param = 1;
+options.F{1}.set_legend     = 1;
 options.str_sgtitle         = 'RPF\_example\_simple plot';
-options.R.set_title_AUC     = 1;
 
 % plot F1 alone
 RPF_plot(R.F1, options, 'F')

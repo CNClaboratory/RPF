@@ -205,10 +205,9 @@ end
 
 %% compute AUC
 
-[AUC, AUC_rel, AUC_max] = RPF_AUC(R);
+[AUC, P2_avg] = RPF_AUC(R);
 
 for i_cond = 1:length(F1.info.cond_vals)
-    R.fit(i_cond).AUC     = AUC(i_cond);
-    R.fit(i_cond).AUC_rel = AUC_rel(i_cond);
-    R.fit(i_cond).AUC_max = AUC_max(i_cond);
+    R.fit(i_cond).AUC    = AUC(i_cond);
+    R.fit(i_cond).P2_avg = P2_avg(i_cond);
 end

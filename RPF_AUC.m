@@ -1,5 +1,5 @@
-function [AUC, AUC_rel, AUC_max] = RPF_AUC(R, P1_LB, P1_UB, P1_grain)
-% [AUC, AUC_rel, AUC_max] = RPF_AUC(R, P1_LB, P1_UB, P1_grain)
+function [AUC, P2_avg] = RPF_AUC(R, P1_LB, P1_UB, P1_grain)
+% [AUC, P2_avg] = RPF_AUC(R, P1_LB, P1_UB, P1_grain)
 %
 % Compute area under the RPF curve for each condition.
 %
@@ -20,11 +20,9 @@ function [AUC, AUC_rel, AUC_max] = RPF_AUC(R, P1_LB, P1_UB, P1_grain)
 %
 % OUTPUTS
 % -------
-% AUC     - 1 x nCond vector holding RPF AUC for each condition
-% AUC_rel - 1 x nCond vector holding relative AUC, where AUC_rel = AUC ./
-%           AUC_max
-% AUC_max - 1 x nCond vector holding maximum possible AUC, defined as 
-%           R.F2.info.P_max * (P1_UB - P1_LB)
+% AUC    - 1 x nCond vector holding RPF AUC for each condition
+% P2_avg - 1 x nCond vector holding the average P2 value over the P1 range
+%          for each condition, where P2_avg = AUC ./ (P1_UB - P1_LB)
 
 
 %% handle inputs
@@ -74,9 +72,5 @@ for i_cond = 1:R.info.nCond
     AUC(i_cond)  = trapz( P1, P2(i_cond,:) );
 end
 
-% compute relative AUC
-for i_cond = 1:R.info.nCond
-    AUC_max(i_cond) = R.F2.info.P_max * (P1_UB - P1_LB);
-end
-
-AUC_rel = AUC ./ AUC_max;
+% compute avg P2
+P2_avg = AUC ./ (P1_UB - P1_LB);

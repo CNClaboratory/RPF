@@ -1,8 +1,8 @@
 % RPF_example_flexible
 %
 % This example script is more complicated than RPF_example_simple, but
-% gives you a chance to quickly play with all the options for analyzing an
-% example data set.
+% gives you a chance to quickly play with a wider range of the options for 
+% analyzing an example data set.
 %
 % In the example data set analyzed here, x represents dot motion coherence, 
 % ranging from 0 to 1, and there are three experimental conditions for low,
@@ -43,7 +43,7 @@ F1_extrapolate = 1; % options for setting the x-range over which F1 is evaluated
                     % 0 = confine x-range to values used in expt (x_min=0.1, x_max=0.8)
                     % 1 = extrapolate to the widest x-range possible (x_min=0, x_max=1)
 
-F1_use_log_PF = 1;  % option for selecting PF based on type of x-axis values
+F1_use_log_PF = 0;  % option for selecting PF based on type of x-axis values
                     % 0 = select a PF that uses untransformed x values
                     % 1 = select a PF that uses log-transformed x values                
 
@@ -63,7 +63,7 @@ F2_extrapolate = 1; % options for setting the x-range over which F2 is evaluated
                     % 0 = confine x-range to values used in expt (x_min=0.1, x_max=0.8)
                     % 1 = extrapolate to the widest x-range possible (x_min=0, x_max=1)
 
-F2_use_log_PF = 1;  % option for selecting PF based on type of x-axis values
+F2_use_log_PF = 0;  % option for selecting PF based on type of x-axis values
                     % 0 = select a PF that uses untransformed x values
                     % 1 = select a PF that uses log-transformed x values                    
                     
@@ -246,10 +246,11 @@ R     = RPF_get_R(F1, F2, P1_LB, P1_UB);
 
 
 % plot RPF analysis
-options.all.set_title_param = 1;
-options.F{1}.default_legend = 1;
-options.str_sgtitle         = 'RPF\_example\_flexible plot';
+% options.all.set_title_param = 1;
+options.R.set_title_AUC = 1;
+options.F{1}.set_legend = 1;
+options.str_sgtitle     = 'RPF\_example\_flexible plot';
 
-options.all.lineColor = cool(F1.info.nCond);
+options.all.lineColor   = cool(F1.info.nCond);
 
 RPF_plot(R, options, 'all');

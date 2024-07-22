@@ -185,7 +185,6 @@
 %       function RPF_default_searchGrid_scaled
 %     - to set the lower and upper bounds for the omega parameter of scaled
 %       PFs (which sets the PF's asymptotic value)
-%     - to define AUC_max and AUC_rel in the function RPF_AUC
 %     - to define default plotting options in the function RPF_plot
 %   * DEFAULT values depend on info.DV:
 %     - 'p(response)'    ~ [0, 1]
