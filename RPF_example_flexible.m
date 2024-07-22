@@ -43,7 +43,7 @@ F1_extrapolate = 1; % options for setting the x-range over which F1 is evaluated
                     % 0 = confine x-range to values used in expt (x_min=0.1, x_max=0.8)
                     % 1 = extrapolate to the widest x-range possible (x_min=0, x_max=1)
 
-F1_use_log_PF = 0;  % option for selecting PF based on type of x-axis values
+F1_use_log_PF = 1;  % option for selecting PF based on type of x-axis values
                     % 0 = select a PF that uses untransformed x values
                     % 1 = select a PF that uses log-transformed x values                
 
@@ -63,7 +63,7 @@ F2_extrapolate = 1; % options for setting the x-range over which F2 is evaluated
                     % 0 = confine x-range to values used in expt (x_min=0.1, x_max=0.8)
                     % 1 = extrapolate to the widest x-range possible (x_min=0, x_max=1)
 
-F2_use_log_PF = 0;  % option for selecting PF based on type of x-axis values
+F2_use_log_PF = 1;  % option for selecting PF based on type of x-axis values
                     % 0 = select a PF that uses untransformed x values
                     % 1 = select a PF that uses log-transformed x values                    
                     

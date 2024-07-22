@@ -11,8 +11,8 @@
 % info.PF_type 
 %   - a string describing whether this is an ordinary or relative PF
 %   - note that in most use cases, the user will only need to manually
-%   define the info struct for F(x), with the info struct for R being
-%   determined automatically by RPF_get_R
+%     define the info struct for F(x), with the info struct for R being
+%     determined automatically by RPF_get_R
 %
 %   values
 %   - 'F(x)' --> ordinary PF of the form P = F(x) where P is performance and
@@ -180,7 +180,7 @@
 %   - minimum and maximum values for performance P = F(x)
 %   - used by the RPF toolbox in the following circumstances
 %     - to optionally append (x_min, P_min) and/or (x_max, P_max) to the
-%       data for use with interpolation
+%       data for use with interpolation (see "Interpolation" section below)
 %     - to define the initial searchGrid for fitting scaled PFs in the
 %       function RPF_default_searchGrid_scaled
 %     - to set the lower and upper bounds for the omega parameter of scaled
@@ -192,10 +192,13 @@
 %     - 'p(correct)'     ~ [0.5, 1]
 %     - 'p(high rating)' ~ [0, 1]
 %     - 'mean rating'    ~ [1, info.nRatings]
-%     - 'd'''            ~ [0, 5]
-%     - 'meta-d'''       ~ [0, 5]
+%     - 'd'''            ~ depends on settings (see below)
+%     - 'meta-d'''       ~ depends on settings (see below)
 %     - 'type 2 AUC'     ~ [0.5, 1]
 %     - 'RT'             ~ [0, max(trialData.RT)]
+%   - for d' and meta-d', the default values of info.P_min and info.P_max 
+%     depend on cell padding settings. see "Fitting d' and meta-d'" section 
+%     below for more details.
 %
 % info.P_label
 %   - a string providing a label for P, e.g. 'p(high rating | r="S2")'
@@ -334,6 +337,37 @@
 % ----------------------
 % Fitting d' and meta-d'
 % ----------------------
+% Many cell padding settings for working with d' and meta-d' default to
+% being turned off to ensure that if these settings are used, the user is
+% explicitly aware of that fact. Nonetheless, for most use cases it is
+% likely that at least some data for at least some subjects will contain
+% issues that require cell padding to prevent numerical issues in SDT
+% analysis. Therefore, as a quick summary, it is recommended to specify the
+% following settings when analyzing d' or meta-d' in the RPF toolbox:
+%
+% info.padCells                       = 1;
+% info.padCells_correctForTrialCounts = 1;
+% info.padCells_nonzero_d             = 1;
+% info.set_P_min_to_d_pad_min         = 1;
+% info.set_P_max_to_d_pad_max         = 1;
+%
+% Alternatively, a shorthand option is to set
+% 
+% info.useAllPaddingSettings = 1;
+% 
+% A more detailed consideration of individual settings is included below.
+% 
+% info.useAllPaddingSettings
+%   - a boolean controlling whether to default all padding settings to be
+%     turned on. if set to 1, it sets all of the following fields to 1,
+%     overwriting any values that may have been manually specified:
+%     - info.padCells
+%     - info.padCells_correctForTrialCounts
+%     - info.padCells_nonzero_d
+%     - info.set_P_min_to_d_pad_min
+%     - info.set_P_max_to_d_pad_max
+%   * DEFAULT is 0
+% 
 % info.padCells
 %   - boolean controlling whether response count cells nR_S1 and nR_S2 are 
 %     padded to prevent 0s from interfering with the analysis results
@@ -342,8 +376,40 @@
 %
 % info.padAmount
 %   - amount to add to every cell of nR_S1 and nR_S2 if info.padCells == 1
+%   - but see info.padCells_correctForTrialCounts for a possible modification
 %   * DEFAULT is 1 / (2*info.nRatings)
-%
+%   
+% info.padCells_correctForTrialCounts
+%   - if set to 1, corrects for imbalances in trial counts for S1 and S2 
+%     stimuli in determining the padAmount. if S1 and S2 stimuli have different 
+%     trial counts, e.g. due to imbalanced rates of stimuls presentation or 
+%     due to the task being a 'detect x' task in which the number of S1 trials 
+%     at x=0 may differ from the number of S2 trials for each level of x > 0,
+%     then using a fixed padAmount can differentially affect S1 and S2
+%     stimuli and thereby introduce biases into SDT calculations e.g. of
+%     d'. 
+% 
+%     this correction works by first determining which of nTrialsPerX_S1
+%     and nTrialsPerX_S2 is larger, where nTrialsPerX_S1 and and nTrialsPerX_S2 
+%     are the number of trials per level of stimulus x for S1 and S2 stimuli, 
+%     respectively. info.padAmount is used as the padAmount for the
+%     stimulus with higher trial count, and the padAmount for the stimulus
+%     with the lower trial count is reduced by the ratio of trial counts.
+%     
+%     for instance, suppose nTrialsPerX_S1 > nTrialsPerX_S2. then
+% 
+%     padAmount_S1 = info.padAmount
+%     padAmount_S2 = info.padAmount * (nTrialsPerX_S2 / nTrialsPerX_S1)
+%     
+%     such that the padAmount for S2 is lower than that for S1 by the same
+%     proportion as the trial counts per level of x are lower for S2 than
+%     for S1. this ensures e.g. that if S1 and S2 have imbalanced trial
+%     counts, then padding will not result in non-zero values of d' when
+%     the uncorrected HR is equal to the uncorrected FAR.
+% 
+%   * DEFAULT is 0, but recommended value is 1 if S1 and S2 stimuli have 
+%     imbalanced trial counts per level of x.
+% 
 % info.padCells_nonzero_d
 %   - boolean controlling whether response count cells nR_S1 and nR_S2 are
 %     padded to prevent a value of d' = 0 from interfering with meta-d'
@@ -355,21 +421,77 @@
 % info.padAmount_nonzero_d
 %   - amount to add to nR_S1(1:nRatings) and nR_S2(nRatings+1:end) if
 %     info.padCells_nonzero_d == 1
-%   * DEFAULT is 1e-5
+%   * DEFAULT is 1e-4
 % 
 % info.PF
 %   - this should be set to one of the "scaled" PFs, i.e.
 %    @RPF_scaled_Weibull, @RPF_scaled_Gumbel, @RPF_scaled_Quick, 
 %    @RPF_scaled_logQuick
+% 
+% info.set_P_min_to_d_pad_min
+%   - boolean controlling whether info.P_min is set to info.padInfo.d_pad_min 
+%     in cases where info.padCells == 1 and info.P_min is not already
+%     specified
+%     (see "info.P_max and info.P_min when using cell padding" below)
+%   * DEFAULT is 0, but recommended value is 1 if using cell padding
 %
-% info.P_min
-%   - recommended value = 0
+% info.set_P_max_to_d_pad_max
+%   - boolean controlling whether info.P_max is set to info.padInfo.d_pad_max 
+%     in cases where info.padCells == 1 and info.P_max is not already
+%     specified
+%     (see "info.P_max and info.P_min when using cell padding" below)
+%   * DEFAULT is 0, but recommended value is 1 if using cell padding
 %
-% info.P_max
-%   - for d', if info.padCells == 1, the recommended value of info.P_max is 
-%     max( [data.d_pad_max] ) where data is returned from RPF_get_Fx_data. 
-%     this defines the max value of the fitted PF to be the max d' value 
-%     achievable given the cell padding settings and trial counts.
-%   - for meta-d', or for d' if info.padCells == 0, the recommended value 
-%     of info.P_max is a large signal-to-noise ratio value, such as 5. 
-%     adjust as needed for your data and use case.
+% info.P_min and info.P_max when using cell padding
+%   - for d', if info.padCells == 1 and info.padAmount > 0, then this sets 
+%     an upper bound on the maximum possible computed value for d'. this 
+%     follows from the fact that the maximum possible hit rate HR and 
+%     minimum possible false alarm rate FAR under cell padding are
+%
+%     HR_pad_max  = (nTrialsPerX_S2 +     padAmount_S2 * nRatings + padAmount_nonzero_d * nRatings) / ...
+%                   (nTrialsPerX_S2 + 2 * padAmount_S2 * nRatings + padAmount_nonzero_d * nRatings);
+%     FAR_pad_min = (                     padAmount_S1 * nRatings) / ...
+%                   (nTrialsPerX_S1 + 2 * padAmount_S1 * nRatings + padAmount_nonzero_d * nRatings);
+%
+%     where nTrialsPerX_S1 and and nTrialsPerX_S2 are the number of trials 
+%     per level of stimulus x for S1 and S2 stimuli, respectively, and 
+%     nRatings and padAmount_nonzero_d are defined as in the info.nRatings 
+%     and info.padAmount_nonzero_d, and padAmount_S1 and padAmount_S2 are 
+%     determined by info.padAmonut and info.padCells_correctForTrialCounts.
+%     
+%     thus, the maximum possible value that can be computed for d' is the 
+%     value achieved when using HR_pad_max and FAR_pad_min:
+% 
+%     d_pad_max = norminv(HR_pad_max) - norminv(FAR_pad_min)
+%
+%   - similarly if info.padCells == 1 and info.padAmount_nonzero_d > 0,
+%     this sets a minimum possible value for d' corresponding to minimum 
+%     values for HR and FAR. the exact value one computes for this minimum 
+%     d' depends on padding settings, trial counts for S1 and S2, and the
+%     type 1 criterion. the toolbox computes d_pad_min by finding the rate
+%     of responding R where R = unpadded HR = unpadded FAR that minimizes 
+%
+%     d_pad_min = norminv(padded HR) - norminv(padded FAR)
+%
+%     this value is very small for small values of padAmount_nonzero_d. for
+%     instance, if nTrialsPerX_S1 = nTrialsPerX_S1 = 50 and default values
+%     for info.padAmount and info.padAmount_nonzero_d are used, then 
+%     d_pad_min ~= 5e-6.
+%
+%   - for d' estimated with cell padding, it is thus recommended to define 
+%     info.P_max and info.P_min to correspond to the max and min values
+%     possible with the specified padding settings. this can be achieved by
+%     setting declining to specify values for info.P_min and info.P_max, and 
+%     insetad setting info.set_P_max_to_pad_max == 1 and 
+%     info.set_P_max_to_pad_max == 1, as noted above. 
+%
+%   - for meta-d' estimated with cell padding, you may also want to use
+%     these settings, if it is appropriate in your data set to assume that 
+%     the max and min possible values for meta-d' must be the same as the
+%     max and min possible values for d'.
+%
+% info.P_min and info.P_max when NOT using cell padding
+%   - if not using cell padding in the estimation of d' or meta-d', then:
+%     - the recommended value for info.P_min is 0
+%     - the recommended value for info.P_max is a large signal-to-noise ratio 
+%       value, such as 5. adjust as needed for your data and use case.

@@ -14,6 +14,10 @@ function list_out = RPF_get_PF_list(list_type)
 % 
 % 'PFs_log'       - all PFs that assume a log-transformed x-axis
 % 'PFs_scaled'    - all PFs that allow for an arbitrary maximum value
+% 'PFs_omega'     - all PFs where the parameter omega control asymptotic
+%                   value (same as 'PFs_scaled')
+% 'PFs_lambda'    - all PFs where the parameter lambda control asymptotic
+%                   value
 % 'PFs_Palamedes' - all PFs adopted from the Palamedes toolbox
 % 'PFs_special'   - all PFs designed for use with special cases (currently,
 %                   for use with PF interpolation and fitting mean rating)
@@ -36,6 +40,11 @@ PFs_log       = {'PAL_Logistic', 'PAL_Gumbel', 'PAL_logQuick', 'PAL_CumulativeNo
             
 PFs_scaled    = {'RPF_scaled_Weibull', 'RPF_scaled_Gumbel', 'RPF_scaled_Quick', 'RPF_scaled_logQuick'};
 
+PFs_omega     = {'RPF_scaled_Weibull', 'RPF_scaled_Gumbel', 'RPF_scaled_Quick', 'RPF_scaled_logQuick'};
+
+PFs_lambda    = {'PAL_Weibull', 'PAL_Gumbel', 'PAL_Quick', 'PAL_logQuick', 'PAL_Logistic', ...
+                 'PAL_CumulativeNormal', 'PAL_HyperbolicSecant'};
+             
 PFs_Palamedes = {'PAL_Weibull', 'PAL_Gumbel', 'PAL_Quick', 'PAL_logQuick', 'PAL_Logistic', ...
                  'PAL_CumulativeNormal', 'PAL_HyperbolicSecant'};
 
@@ -44,7 +53,7 @@ PFs_inverse   = {'PAL_Weibull', 'PAL_Gumbel', 'PAL_Quick', 'PAL_logQuick', 'PAL_
              
 PFs_special   = {'RPF_meanRating_PF', 'RPF_interp_Fx'};
 
-PFs_all       = unique( [PFs_log, PFs_scaled, PFs_Palamedes, PFs_inverse, PFs_special] );
+PFs_all       = unique( [PFs_log, PFs_scaled, PFs_omega, PFs_lambda, PFs_Palamedes, PFs_inverse, PFs_special] );
 
 
 % RPFs

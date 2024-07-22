@@ -42,6 +42,7 @@ F1.info.cond_labels = {'low density', 'med density', 'high density'};
 
 % for info on the constrain struct, see "help RPF_fit_Fx"
 constrain1.value.gamma = 0;
+constrain1.value.omega = 'P_max';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -50,16 +51,6 @@ F1.info = RPF_update_Fx_info(F1.info, trialData);
 
 % get data
 F1.data = RPF_get_Fx_data(F1.info, trialData);
-
-
-% manually update the info and constrain structs with results from the data
-% analysis so that P_max is set to the maximum possible d' value, given the
-% padding settings used. 
-% (note, this is optional)
-if isfield(F1.data(1), 'd_pad_max')
-    F1.info.P_max          = max( [F1.data.d_pad_max] );
-    constrain1.value.omega = max( [F1.data.d_pad_max] );
-end
 
 % fit data
 F1.fit = RPF_fit_Fx(F1.info, F1.data, constrain1);

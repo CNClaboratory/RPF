@@ -20,11 +20,25 @@ function fit = RPF_fit_Fx(info, data, constrain, searchGrid)
 %                  is constrained to be X
 %   value.beta   - same, but for parameter beta
 %   value.gamma  - same, but for parameter gamma
-%   value.lambda - same, but for parameter lambda
+%   value.lambda OR value.omega - same, but for parameter lambda or omega
 %
-%   if the fitted PF is one of the scaled PFs (see help RPF_info for more),
-%   then instead of value.lambda the final parameter will be value.omega,
-%   which sets the maximum possible value of the psychometric function
+%   alpha, beta, and gamma are parameters controlling threshold, slope, and
+%   guess rate, respectively.
+%
+%   the final parameter, lambda or omega, determines the asymptotic value
+%   of the fitted psychometric function. 
+%   - lambda is the lapse rate for PFs that fit response probabilities, 
+%     including all PFs from the Palamedes toolbox as returned by 
+%     RPF_get_PF_list('PFs_lambda') 
+%   - omega is the asymptotic maximum value for PFs that fit dependent 
+%     variables whose max values can exceed 1, as returned by 
+%     RPF_get_PF_list('PFs_omega') 
+%
+%   additionally, the following special values may be used:
+%   - if value.gamma is set to the string 'P_min', then value.gamma will be
+%     reset to the value info.P_min
+%   - if value.omega is set to the string 'P_max', then value.omega will be
+%     reset to the value info.P_max
 %
 % searchGrid - a struct used to initialize the function fitting process.
 %              e.g. see example usage at https://www.palamedestoolbox.org/weibullandfriends.html
@@ -62,6 +76,15 @@ if ~exist('searchGrid', 'var')
     searchGrid = [];
 end
 
+if isstruct(constrain)
+    if isfield(constrain.value, 'gamma') && strcmp(constrain.value.gamma, 'P_min')
+        constrain.value.gamma = info.P_min;
+    end
+    
+    if isfield(constrain.value, 'omega') && strcmp(constrain.value.omega, 'P_max')
+        constrain.value.omega = info.P_max;
+    end
+end
 
 %% determine type of fitting to use
 

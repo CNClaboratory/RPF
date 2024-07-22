@@ -111,36 +111,99 @@ switch task_type
 end
 
 
-%% handle response padding
+%% determine padInfo
 
-% determine padInfo
-padInfo.padCells  = info.padCells;
-padInfo.padAmount = info.padAmount;
+% nTrialsPerX = max( [sum(nR_S1, 2)', sum(nR_S2, 2)'] );
 
-nTrialsPerX = max( [sum(nR_S1, 2)', sum(nR_S2, 2)'] );
-padInfo.nTrialsPerX = nTrialsPerX;
+% take nTrialsPerX_Si to be the number of trials for which a valid response
+% was recorded (as reflected in nR_Si) that is maximal across levels of
+% stimulus strength x
+nTrialsPerX_S1 = max( sum(nR_S1, 2) ); 
+nTrialsPerX_S2 = max( sum(nR_S2, 2) );
 
-% tally max HR, min FAR, and max d' allowed by padding and trial counts
-HR_pad_max  = (nTrialsPerX + info.padAmount*nRatings) / (nTrialsPerX + 2*info.padAmount*nRatings);
-FAR_pad_min = info.padAmount*nRatings / (nTrialsPerX + 2*info.padAmount*nRatings);
 
+if info.padCells_correctForTrialCounts
+    
+    if nTrialsPerX_S1 > nTrialsPerX_S2
+        padAmount_S1 = info.padAmount;
+        padAmount_S2 = info.padAmount * (nTrialsPerX_S2 / nTrialsPerX_S1);
+    else
+        padAmount_S2 = info.padAmount;
+        padAmount_S1 = info.padAmount * (nTrialsPerX_S1 / nTrialsPerX_S2);        
+    end
+    
+else
+    padAmount_S1 = info.padAmount;
+    padAmount_S2 = info.padAmount;
+end
+
+padAmount_nonzero_d = info.padAmount_nonzero_d;
+
+% package padInfo struct
+padInfo.padCells                       = info.padCells;
+padInfo.padCells_correctForTrialCounts = info.padCells_correctForTrialCounts;
+padInfo.padCells_nonzero_d             = info.padCells_nonzero_d;
+
+padInfo.nTrialsPerX_S1                 = nTrialsPerX_S1;
+padInfo.nTrialsPerX_S2                 = nTrialsPerX_S2;
+
+padInfo.padAmount                      = info.padAmount;
+padInfo.padAmount_S1                   = padAmount_S1;
+padInfo.padAmount_S2                   = padAmount_S2;
+padInfo.padAmount_nonzero_d            = info.padAmount_nonzero_d;
+
+
+%% apply response padding
+
+% optinally apply padding to prevent zeros in nR_S1 and nR_S2, since this 
+% interferes with estimation of d' and meta-d'.
+% 
+% this padding works by adding padAmount_Si to all cells of nR_Si,
+% thereby preventing any zero counts that could interfere with
+% calculation of d' and meta-d'.
+if padInfo.padCells
+    nR_S1 = nR_S1 + padAmount_S1;
+    nR_S2 = nR_S2 + padAmount_S2;
+end
+
+% optionally apply padding to prevent d' = 0, since meta-d' is undefined when d' = 0.
+% 
+% this padding works by adding a very small amount padAmount_nonzero_d
+% to all trials in which the stimulus was S1 and the response was "S1"
+% (correct rejections), and all trials in which the stimulus was S2 and the
+% response was "S2" (hits), thereby adding a balanced amount to S1 and S2
+% response counts that prevents values of d'=0.
+if padInfo.padCells_nonzero_d
+    nR_S1(:, 1 : nRatings)     = nR_S1(:, 1 : nRatings)     + padAmount_nonzero_d;
+    nR_S2(:, nRatings+1 : end) = nR_S2(:, nRatings+1 : end) + padAmount_nonzero_d;
+end
+
+
+%% compute min and max FAR, HR, d' given padding settings
+
+% max HR occurs when all S2 trials are hits
+HR_pad_max  = (nTrialsPerX_S2 +     padAmount_S2 * nRatings + padAmount_nonzero_d * nRatings) / ...
+              (nTrialsPerX_S2 + 2 * padAmount_S2 * nRatings + padAmount_nonzero_d * nRatings);
+
+% min HR occurs when no S2 trials are hits
+HR_pad_min  = (                     padAmount_S2 * nRatings + padAmount_nonzero_d * nRatings) / ...
+              (nTrialsPerX_S2 + 2 * padAmount_S2 * nRatings + padAmount_nonzero_d * nRatings);
+
+% max FAR occurs when all S1 trials are FAs
+FAR_pad_max = (nTrialsPerX_S1 +     padAmount_S1 * nRatings) / ...
+              (nTrialsPerX_S1 + 2 * padAmount_S1 * nRatings + padAmount_nonzero_d * nRatings);
+
+% min FAR occurs when no S1 trials are FAs
+FAR_pad_min = (                     padAmount_S1 * nRatings) / ...
+              (nTrialsPerX_S1 + 2 * padAmount_S1 * nRatings + padAmount_nonzero_d * nRatings);
+          
+padInfo.HR_pad_min  = HR_pad_min;
 padInfo.HR_pad_max  = HR_pad_max;
 padInfo.FAR_pad_min = FAR_pad_min;
+padInfo.FAR_pad_max = FAR_pad_max;
+
 padInfo.d_pad_max   = norminv( HR_pad_max ) - norminv( FAR_pad_min );
-
-% optinally apply padding to prevent zeros in nR_S1 and nR_S2, 
-% since this interferes with estimation of d' and meta-d'
-if info.padCells
-    nR_S1 = nR_S1 + info.padAmount;
-    nR_S2 = nR_S2 + info.padAmount;
-end
-
-% optionally apply padding to prevent d' = 0, 
-% since meta-d' is undefined when d' = 0
-if info.padCells_nonzero_d
-    nR_S1(:, 1 : nRatings)     = nR_S1(:, 1 : nRatings)     + info.padAmount_nonzero_d;
-    nR_S2(:, nRatings+1 : end) = nR_S2(:, nRatings+1 : end) + info.padAmount_nonzero_d;
-end
+padInfo.d_pad_min   = norminv( HR_pad_min ) - norminv( FAR_pad_min );
 
 
 %% express SDT counts in type 2 format

@@ -37,7 +37,7 @@ function data = RPF_get_Fx_data(info, trialData)
 %   data and other purposes.
 
 
-%% 
+%% get data depending on DV
 
 for i_cond = 1:length(info.cond_vals)
 
@@ -69,4 +69,3 @@ for i_cond = 1:length(info.cond_vals)
             
     end
 end
-    

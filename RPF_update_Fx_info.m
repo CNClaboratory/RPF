@@ -1,8 +1,9 @@
 function info = RPF_update_Fx_info(info, trialData)
 % info = RPF_update_Fx_info(trialData, info)
 % 
-% Update info struct with default values using trialData. for more details,
-% see "help RPF_info"
+% Update info struct with default values for unspecified fields using trialData. 
+% 
+% For more details on the info struct, see "help RPF_info"
 
 
 %% check info.DV
@@ -307,29 +308,79 @@ if strcmp(info.DV, 'p(high rating)')
 end
 
 
-%% pad info for d' and meta-d'
+%% pad info for d', meta-d', and type 2 AUC
 
 if any(strcmp(info.DV, {'d''', 'meta-d''', 'type 2 AUC'}))
+
+    if ~isfield(info, 'useAllPaddingSettings') || isempty(info.useAllPaddingSettings)
+        info.useAllPaddingSettings = 0;
+    end
+    
+    if info.useAllPaddingSettings
+        info.padCells                       = 1;
+        info.padCells_correctForTrialCounts = 1;
+        info.padCells_nonzero_d             = 1;
+        info.set_P_min_to_d_pad_min         = 1;
+        info.set_P_max_to_d_pad_max         = 1;
+    end
+    
     if ~isfield(info, 'padCells') || isempty(info.padCells)
         info.padCells = 0;
     end
 
-    if info.padCells && (~isfield(info, 'padAmount') || isempty(info.padAmount))
+    if info.padCells == 0
+        info.padAmount = 0;
+    elseif ~isfield(info, 'padAmount') || isempty(info.padAmount)
         info.padAmount = 1 / (2*info.nRatings);
     end
+    
+    if ~isfield(info, 'padCells_correctForTrialCounts') || isempty(info.padCells_correctForTrialCounts)
+        info.padCells_correctForTrialCounts = 0;
+    end    
     
     if ~isfield(info, 'padCells_nonzero_d') || isempty(info.padCells_nonzero_d)
         info.padCells_nonzero_d = 0;
     end
 
-    if info.padCells_nonzero_d && (~isfield(info, 'padAmount_nonzero_d') || isempty(info.padAmount_nonzero_d))
-        info.padAmount_nonzero_d = 1e-5;
+    if info.padCells_nonzero_d == 0
+        info.padAmount_nonzero_d = 0;
+    elseif ~isfield(info, 'padAmount_nonzero_d') || isempty(info.padAmount_nonzero_d)
+        info.padAmount_nonzero_d = 1e-4;
     end
+    
+    
+    % get full padInfo
+    for i_cond = 1:length(info.cond_vals)
+
+        trialData_i = RPF_filter_trialData(trialData, info.nRatings, info.cond_vals(i_cond));
+
+        info_i      = info;
+        info_i.cond_vals   = info_i.cond_vals(i_cond);
+        info_i.cond_labels = info_i.cond_labels{i_cond};
+        
+        [counts, padInfo(i_cond)] = RPF_trials2counts_SDT(trialData_i, info_i);
+    end 
+    
+    info.padInfo = padInfo;
+    
+    info.d_pad_min = min( [info.padInfo.d_pad_min] );
+    info.d_pad_max = max( [info.padInfo.d_pad_max] );
+    
+    
 end
 
 
-
 %% P1 min and max
+
+if isfield(info, 'padCells') && info.padCells == 1
+    if ~isfield(info, 'set_P_min_to_d_pad_min') || isempty(info.set_P_min_to_d_pad_min)
+        info.set_P_min_to_d_pad_min = 0;
+    end
+
+    if ~isfield(info, 'set_P_max_to_d_pad_max') || isempty(info.set_P_max_to_d_pad_max)
+        info.set_P_max_to_d_pad_max = 0;
+    end
+end
 
 switch info.DV
     case {'p(correct)', 'type 2 AUC'}
@@ -345,9 +396,19 @@ switch info.DV
         P_max = info.nRatings;
         
     case {'d''', 'meta-d'''}
-        P_min = 0;
-        P_max = 5;
-
+        
+        if isfield(info, 'set_P_min_to_d_pad_min') && info.set_P_min_to_d_pad_min
+            P_min = info.padInfo.d_pad_min;
+        else
+            P_min = 0;
+        end
+        
+        if isfield(info, 'set_P_max_to_d_pad_max') && info.set_P_max_to_d_pad_max
+            P_max = info.padInfo.d_pad_max;
+        else
+            P_max = 5;
+        end
+        
     case 'RT'
         P_min = 0;
         P_max = max(trialData.RT);
