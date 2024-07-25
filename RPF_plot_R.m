@@ -1,31 +1,33 @@
-function [h, options] = RPF_plot_R(R, options, h)
-% [h, options] = RPF_plot_R(R, options, h)
+function [h, plotSettings] = RPF_plot_R(R, plotSettings, h)
+% [h, plotSettings] = RPF_plot_R(R, plotSettings, h)
 %
 % Create a plot of the relative psychometric function P2 = R(P1).
 %
 % INPUTS
 % ------
-% * R       - the R struct 
-% * options - a struct containing options for controlling the appearance of 
-%             the plot. see "help RPF_plot_update_options" for a full listing of
-%             options. any unspecified settings are set to their default values
-%             with RPF_plot_update_options. if the options input is unspecified 
-%             or empty, then all plot settings are set to their default values.
-% * h       - a handle to the plot or subplot in which the F(x) plot will
-%             be created. if empty or unspecified, a new figure is created.
+% * R - an R struct. see RPF_guide('R') for more information
+% * plotSettings - a struct controlling the appearance of the plot. 
+%     - see RPF_guide('plotSettings') for a full description of settings
+%       and default values
+%     - any unspecified settings are set to their default values using
+%       RPF_update_plotSettings
+%     - if the plotSettings input is unspecified or empty, then all plot 
+%       settings are set to their default values
+% * h - a handle to the plot or subplot in which the F(x) plot will
+%       be created. if empty or unspecified, a new figure is created.
 %
 % OUTPUTS
 % -------
-% * h       - a handle to the plot 
-% * options - the updated options struct used to make the plot
+% * h            - a handle to the plot 
+% * plotSettings - the updated plotSettings struct used to make the plot
 
 %% handle inputs
 
-if~exist('options', 'var')
-    options = [];
+if~exist('plotSettings', 'var')
+    plotSettings = [];
 end
 
-options = RPF_plot_update_options(R, options);
+plotSettings = RPF_update_plotSettings(R, plotSettings);
 
 if ~exist('h', 'var') || isempty(h)
     h = figure;
@@ -36,7 +38,7 @@ end
 
 hold on;
 nCond = length(R.info.cond_vals);
-x     = options.R.x_min: .01: options.R.x_max;
+x     = plotSettings.R.x_min: .01: plotSettings.R.x_max;
 
 for i_cond = 1:nCond
 
@@ -53,9 +55,9 @@ for i_cond = 1:nCond
     end
     
     plot(P1fit, P2fit, ...
-         'LineStyle', options.R.lineStyle{i_cond}, ...
-         'LineWidth', options.R.lineWidth(i_cond), ...
-         'Color', options.R.lineColor(i_cond,:) );     
+         'LineStyle', plotSettings.R.lineStyle{i_cond}, ...
+         'LineWidth', plotSettings.R.lineWidth(i_cond), ...
+         'Color', plotSettings.R.lineColor(i_cond,:) );     
 end
 
 
@@ -105,20 +107,20 @@ for i_cond = 1:nCond
     
     plot(P1data, P2data, ...
          'LineStyle', 'none', ...
-         'Marker', options.R.marker{i_cond}, ...
-         'MarkerSize', options.R.markerSize(i_cond), ...
-         'Color', options.R.markerColor(i_cond,:) );
+         'Marker', plotSettings.R.marker{i_cond}, ...
+         'MarkerSize', plotSettings.R.markerSize(i_cond), ...
+         'Color', plotSettings.R.markerColor(i_cond,:) );
 
     
     if exist('P1data_at_x0','var') && exist('P2data_at_x0','var')
         plot(P1data_at_x0, P2data_at_x0, ...
             'LineStyle', 'none', ...
-            'Marker', options.R.marker_partial{i_cond}, ...
-            'MarkerSize', options.R.markerSize_partial(i_cond), ...
-            'Color', options.R.markerColor_partial(i_cond,:) );
+            'Marker', plotSettings.R.marker_partial{i_cond}, ...
+            'MarkerSize', plotSettings.R.markerSize_partial(i_cond), ...
+            'Color', plotSettings.R.markerColor_partial(i_cond,:) );
     end    
     
-%     plot(R.F1.data(i_cond).P, R.F2.data(i_cond).P, options.style_data{i_cond});
+%     plot(R.F1.data(i_cond).P, R.F2.data(i_cond).P, plotSettings.style_data{i_cond});
 
 end
 
@@ -126,19 +128,19 @@ end
 %% configure plot settings
 
 % axis labels
-xlabel(options.R.str_P1)
-ylabel(options.R.str_P2)
+xlabel(plotSettings.R.str_P1)
+ylabel(plotSettings.R.str_P2)
 
 
 % x-axis limits
 xl = xlim;
 
-if options.R.set_P1_lim_min
-    xl(1) = options.R.P1_min;
+if plotSettings.R.set_P1_lim_min
+    xl(1) = plotSettings.R.P1_min;
 end
 
-if options.R.set_P1_lim_max
-    xl(2) = options.R.P1_max;
+if plotSettings.R.set_P1_lim_max
+    xl(2) = plotSettings.R.P1_max;
 end
 
 xlim(xl);
@@ -147,26 +149,26 @@ xlim(xl);
 % y-axis limits
 yl = ylim;
 
-if options.R.set_P2_lim_min
-    yl(1) = options.R.P2_min;
+if plotSettings.R.set_P2_lim_min
+    yl(1) = plotSettings.R.P2_min;
 end
 
-if options.R.set_P2_lim_max
-    yl(2) = options.R.P2_max;
+if plotSettings.R.set_P2_lim_max
+    yl(2) = plotSettings.R.P2_max;
 end
 
 ylim(yl);
 
 
 % shading AUC region
-if options.R.shade_overlap
+if plotSettings.R.shade_overlap
     yl = ylim;
 
     area([R.info.P1_LB, R.info.P1_UB], yl(2)*[1,1], yl(1), ...
-        'EdgeColor', options.R.shade_color, ...
-        'EdgeAlpha', options.R.shade_alpha, ...
-        'FaceColor', options.R.shade_color, ...
-        'FaceAlpha', options.R.shade_alpha);
+        'EdgeColor', plotSettings.R.shade_color, ...
+        'EdgeAlpha', plotSettings.R.shade_alpha, ...
+        'FaceColor', plotSettings.R.shade_color, ...
+        'FaceAlpha', plotSettings.R.shade_alpha);
 end
 
 
@@ -179,8 +181,8 @@ end
 
 
 % legend and title
-if ~isempty(options.R.str_legend)
-    legend(options.R.str_legend, 'location', 'best');
+if ~isempty(plotSettings.R.str_legend)
+    legend(plotSettings.R.str_legend, 'location', 'best');
 end
 
-title(options.R.str_title)
+title(plotSettings.R.str_title)

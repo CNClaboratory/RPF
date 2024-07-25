@@ -60,6 +60,6 @@ end
 
 %% 
 
-% if allFound
-%     disp('All toolboxes found!')
-% end
+if allFound
+    disp('All toolboxes found!')
+end

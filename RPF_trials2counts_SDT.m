@@ -1,6 +1,25 @@
 function [counts, padInfo] = RPF_trials2counts_SDT(trialData, info)
 % [counts, padInfo] = RPF_trials2counts_SDT(trialData, info)
-
+%
+% Produce response counts as a function of various conditions for use with
+% SDT analysis.
+%
+% INPUTS
+% ------
+% info - a struct holding settings for data analysis. see RPF_guide('info') 
+%    for more information.
+% 
+% trialData - a struct holding trial-by-trial data from an experiment. see
+%    RPF_guide('trialData') for more information.
+%
+% OUTPUTS
+% -------
+% counts - a struct holding counts for SDT analysis. see RPF_guide('counts') 
+%    for more information.
+%
+% padInfo - a struct holding information on the cell padding settings used
+%    in the calculation of counts. see RPF_guide('padInfo') for more
+%    information.
 
 %% sort inputs
 
@@ -238,9 +257,6 @@ end
 nC_rS1 = fliplr(nC_rS1);
 nI_rS1 = fliplr(nI_rS1);
 
-nC = nC_rS1 + nC_rS2;
-nI = nI_rS1 + nI_rS2;
-
 
 %% package output
 
@@ -249,8 +265,6 @@ counts.task_type = task_type;
 counts.nR_S1 = nR_S1;
 counts.nR_S2 = nR_S2;
 
-counts.nC     = nC;
-counts.nI     = nI;
 counts.nC_rS1 = nC_rS1;
 counts.nI_rS1 = nI_rS1;
 counts.nC_rS2 = nC_rS2;

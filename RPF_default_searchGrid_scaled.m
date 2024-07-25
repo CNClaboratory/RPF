@@ -1,19 +1,33 @@
-function [searchGrid, paramsFree] = RPF_default_searchGrid_scaled(constrain, xt_fn, P_min, P_max)
-% [searchGrid, paramsFree] = RPF_default_searchGrid_scaled(constrain, xt_fn, P_min, P_max)
+function searchGrid = RPF_default_searchGrid_scaled(constrain, xt_fn, P_min, P_max)
+% searchGrid = RPF_default_searchGrid_scaled(constrain, xt_fn, P_min, P_max)
 
 
 %% define search grid
 
 %% alpha
 
-searchGrid.alpha = .05:.05:3;
+if isstruct(constrain) && isfield(constrain, 'value') && isfield(constrain.value, 'alpha') && ~isempty(constrain.value.alpha)
+    % set alpha to a fixed value
+    searchGrid.alpha = constrain.value.alpha;
 
-% transform alpha according to the appropriate x transform
-searchGrid.alpha = xt_fn( searchGrid.alpha );
+else
+    % leave alpha as a free parameter
+    searchGrid.alpha = .05:.05:3;
+    
+    % transform alpha according to the appropriate x transform
+    searchGrid.alpha = xt_fn( searchGrid.alpha );
+end
 
 %% beta
 
-searchGrid.beta  = 10.^(-1:.1:1);
+if isstruct(constrain) && isfield(constrain, 'value') && isfield(constrain.value, 'beta') && ~isempty(constrain.value.beta)
+    % set beta to a fixed value
+    searchGrid.beta = constrain.value.beta;
+
+else
+    % leave beta as free parameter
+    searchGrid.beta  = 10.^(-1:.1:1);
+end
 
 %% gamma
 

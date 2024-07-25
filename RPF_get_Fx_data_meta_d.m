@@ -126,6 +126,7 @@ data.x           = x;
 data.xt          = xt;        
 
 data.P         = P;        
+data.d_pad_min = padInfo.d_pad_min;
 data.d_pad_max = padInfo.d_pad_max;
 data.nRatings  = info.nRatings;
 

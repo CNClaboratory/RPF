@@ -59,8 +59,8 @@ for i_cond = 1:length(data)
     % adjust t2c so they're centered around meta_c instead of 0
     fit(i_cond).meta_t2c = meta_t2c + fit(i_cond).meta_c';    
     
-    fit(i_cond).k = sum(paramsFree);
-    
+    fit(i_cond).k     = sum(paramsFree);
+    fit(i_cond).k_all = sum(paramsFree) + numel(meta_t2c);
     
     switch data(i_cond).DV_respCond
         case 'all'

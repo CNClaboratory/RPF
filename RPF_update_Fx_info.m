@@ -1,10 +1,10 @@
 function info = RPF_update_Fx_info(info, trialData)
-% info = RPF_update_Fx_info(trialData, info)
+% info = RPF_update_Fx_info(info, trialData)
 % 
-% Update info struct with default values for unspecified fields using trialData. 
+% Update the info struct with default values for unspecified fields. 
 % 
-% For more details on the info struct, see "help RPF_info"
-
+% See RPF_guide('info') and RPF_guide('trialData') for more information on
+% these structs.
 
 %% check info.DV
 

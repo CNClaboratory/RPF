@@ -13,7 +13,7 @@
 % Note that the bulk of the analysis workflow consists in setting up your
 % info structs properly. If you want to try adjusting this example to your
 % own purposes, make sure you pay special attention to adapting the info
-% struct properly to your needs. See "help RPF_info" for more detail.
+% struct properly to your needs. See RPF_guide('info') for more details.
 
 
 %% prepare
@@ -36,7 +36,7 @@ load trialData_example_discrim.mat
 F1_DV = 1;          % select DV for F1
                     % 1 = p(correct), 2 = d', 3 = p(response)
 
-F1_fit = 1;         % select fit type for F1
+F1_fit = 3;         % select fit type for F1
                     % 1 = MLE, 2 = SSE, 3 = interp
 
 F1_extrapolate = 1; % options for setting the x-range over which F1 is evaluated
@@ -50,13 +50,13 @@ F1_use_log_PF = 0;  % option for selecting PF based on type of x-axis values
                     
 %%%%% F2 settings %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-F2_DV = 1;          % select DV for F2
+F2_DV = 3;          % select DV for F2
                     % 1 = p(high rating), 2 = mean rating, 3 = meta-d', 4 = type 2 AUC, 5 = RT
 
 F2_DV_respCond = 3; % select DV response condition for F2
                     % 1 = "S1" responses, 2 = "S2" responses, 3 = all responses
 
-F2_fit = 1;         % select fit type for F2
+F2_fit = 3;         % select fit type for F2
                     % 1 = MLE, 2 = SSE, 3 = interp
 
 F2_extrapolate = 1; % options for setting the x-range over which F2 is evaluated  
@@ -246,11 +246,11 @@ R     = RPF_get_R(F1, F2, P1_LB, P1_UB);
 
 
 % plot RPF analysis
-% options.all.set_title_param = 1;
-options.R.set_title_AUC = 1;
-options.F{1}.set_legend = 1;
-options.str_sgtitle     = 'RPF\_example\_flexible plot';
+% plotSettings.all.set_title_param = 1;
+plotSettings.R.set_title_AUC = 1;
+plotSettings.F{1}.set_legend = 1;
+plotSettings.str_sgtitle     = 'RPF\_example\_flexible plot';
 
-options.all.lineColor   = cool(F1.info.nCond);
+plotSettings.all.lineColor   = cool(F1.info.nCond);
 
-RPF_plot(R, options, 'all');
+RPF_plot(R, plotSettings, 'all');

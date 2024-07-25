@@ -3,24 +3,11 @@ function data = RPF_get_Fx_data(info, trialData)
 % 
 % INPUTS
 % ------
-% info - see "help RPF_info" for information on the contents of the info
-%        struct and how to configure it
+% info - a struct holding settings for data analysis. see RPF_guide('info') 
+%    for more information.
 % 
-% trialData - a struct with the following fields, all of which are vectors
-%             holding trial-by-trial data
-%   x         - stimulus strength in raw (non-transformed) units of measurement
-%   stimID    - objective identity of stimulus. 0 = S1, 1 = S2, 0.5 = N/A
-%               due to absence of stimulus (e.g. stim discrimination at x = 0)
-%   response  - subject's stimulus classification. 0 = "S1", 1 = "S2"
-%   rating    - subject's rating of confidence or awareness. measured on an
-%               ordinal scale from 1 to nRatings
-%   condition - experimental condition. must be a numeric label, e.g. 1 or 2
-%   RT        - reaction time
-%
-% x and stimID are the only mandatory variables. response, rating, and RT
-% are optional depending on the desired DV for analysis. condition is also
-% not required if the experiment had no conditions other than stimulus
-% strength.
+% trialData - a struct holding trial-by-trial data from an experiment. see
+%    RPF_guide('trialData') for more information.
 %
 % OUTPUTS
 % -------

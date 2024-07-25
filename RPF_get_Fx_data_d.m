@@ -41,6 +41,7 @@ data.x           = x;
 data.xt          = xt;        
 
 data.P         = SDT.type1.d;        
+data.d_pad_min = padInfo.d_pad_min;
 data.d_pad_max = padInfo.d_pad_max;
 data.nRatings  = info.nRatings;
 

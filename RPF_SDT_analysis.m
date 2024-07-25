@@ -7,8 +7,6 @@ function SDT = RPF_SDT_analysis(counts)
 nR_S1 = counts.nR_S1;
 nR_S2 = counts.nR_S2;
 
-nC     = counts.nC;
-nI     = counts.nI;
 nC_rS1 = counts.nC_rS1;
 nI_rS1 = counts.nI_rS1;
 nC_rS2 = counts.nC_rS2;
@@ -88,9 +86,6 @@ SDT.type1.c    = c';
 
 
 % type 2, all responses
-SDT.type2.all.nC = nC;
-SDT.type2.all.nI = nI;
-
 SDT.type2.all.nH2  = nH2';
 SDT.type2.all.nF2  = nF2';
 SDT.type2.all.nM2  = nM2';

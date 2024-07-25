@@ -85,18 +85,6 @@ end
 R.info.max_P1_at_x_min = max( R.info.P1_at_x_min );
 R.info.min_P1_at_x_max = min( R.info.P1_at_x_max );
 
-% if isfield(F2.info, 'P_min')
-%     R.info.AUC_min = F2.info.P_min * (R.info.min_P1_at_x_max - R.info.max_P1_at_x_min);
-% else
-%     R.info.AUC_min = NaN;
-% end
-% 
-% if isfield(F2.info, 'P_max')
-%     R.info.AUC_max = F2.info.P_max * (R.info.min_P1_at_x_max - R.info.max_P1_at_x_min);
-% else
-%     R.info.AUC_max = NaN;
-% end
-
 
 %% define R.fit
 
@@ -105,17 +93,8 @@ for i_cond = 1:R.info.nCond
     R.fit(i_cond).P1_at_x_min = R.info.P1_at_x_min(i_cond);
     R.fit(i_cond).P1_at_x_max = R.info.P1_at_x_max(i_cond);
     
-    % determine the appropriate RPF function, if any
-    if all( strcmp('PAL_Weibull', {func2str(F1.fit(i_cond).PF), func2str(F2.fit(i_cond).PF)}) )
-        R.fit(i_cond).PF = @RPF_Weibull_RPF;
+    R.fit(i_cond).PF = R.info.PF;    
     
-    elseif all( strcmp('RPF_interp_Fx', {func2str(F1.fit(i_cond).PF), func2str(F2.fit(i_cond).PF)}) )
-        R.fit(i_cond).PF = @RPF_interp_RPF;
-    
-    else
-        R.fit(i_cond).PF = [];
-    end
-
     % handle case where RPF is estimated entirely via interpolation
     if isa(R.info.PF, 'function_handle') && strcmp('RPF_interp_RPF', func2str(R.fit(i_cond).PF))
 
@@ -148,8 +127,8 @@ for i_cond = 1:R.info.nCond
         R.fit(i_cond).params.P2_sorted_unique = P2_sorted_unique;
         R.fit(i_cond).params.interp_method    = F2.fit(i_cond).params.interp_method;
         
-        R.info.P1_sorted_unique_min(i_cond) = min(P1_sorted_unique);
-        R.info.P1_sorted_unique_max(i_cond) = max(P1_sorted_unique);
+        R.info.P1_data_min(i_cond) = min(P1_sorted_unique);
+        R.info.P1_data_max(i_cond) = max(P1_sorted_unique);
         
     % handle all other cases
     else
@@ -163,11 +142,11 @@ end
 
 % find min LB and max UB
 if isa(R.info.PF, 'function_handle') && strcmp('RPF_interp_RPF', func2str(R.fit(i_cond).PF))
-    R.info.max_P1_sorted_unique_min = max( R.info.P1_sorted_unique_min );
-    R.info.min_P1_sorted_unique_max = min( R.info.P1_sorted_unique_max );
+    R.info.max_P1_data_min = max( R.info.P1_data_min );
+    R.info.min_P1_data_max = min( R.info.P1_data_max );
     
-    R.info.P1_LB_min = R.info.max_P1_sorted_unique_min;
-    R.info.P1_UB_max = R.info.min_P1_sorted_unique_max;
+    R.info.P1_LB_min = R.info.max_P1_data_min;
+    R.info.P1_UB_max = R.info.min_P1_data_max;
     
 else
     R.info.P1_LB_min = R.info.max_P1_at_x_min;

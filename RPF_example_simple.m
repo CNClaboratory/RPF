@@ -13,7 +13,7 @@
 % Note that the bulk of the analysis workflow consists in setting up your
 % info structs properly. If you want to try adjusting this example to your
 % own purposes, make sure you pay special attention to adapting the info
-% struct properly to your needs. See "help RPF_info" for more detail.
+% struct properly to your needs. See RPF_guide('info') for more details.
 
 
 %% prepare
@@ -90,15 +90,15 @@ P1_UB = []; % upper bound for AUC. if empty, defaults to max possible value in R
 R     = RPF_get_R(F1, F2, P1_LB, P1_UB);
 
 % plot RPF analysis
-options.all.set_title_param = 1;
-options.F{1}.set_legend     = 1;
-options.str_sgtitle         = 'RPF\_example\_simple plot';
+plotSettings.all.set_title_param = 1;
+plotSettings.F{1}.set_legend     = 1;
+plotSettings.str_sgtitle         = 'RPF\_example\_simple plot';
 
 % plot F1 alone
-RPF_plot(R.F1, options, 'F')
+RPF_plot(R.F1, plotSettings, 'F')
 
 % plot R alone
-RPF_plot(R, options, 'R')
+RPF_plot(R, plotSettings, 'R')
 
 % plot F1, F2, and R together
-RPF_plot(R, options, 'all');
+RPF_plot(R, plotSettings, 'all');

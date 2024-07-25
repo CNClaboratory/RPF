@@ -1,25 +1,31 @@
-% RPF_info
+% RPF_guide_info
 %
-% Description of the fields of the info struct used in the RPF toolbox. 
+% Description of the info struct used in the RPF toolbox. 
+%
+% Note that this refers to the info struct of the F struct. For information
+% about the info struct of the R struct, see RPF_guide('R').
 % 
-% Most fields have sensible default values that are set in the function 
-% RPF_update_Fx_info. The only field with no default value that must be 
-% defined manually is info.DV .
-% 
+% info is a struct whose fields contain information and settings that are 
+% used to determine how data analysis and psychometric function fitting
+% should proceed in the functions RPF_get_Fx_data and RPF_fit_Fx_data. Some 
+% information in info is also used to help guide subsequent RPF analysis. 
+%
+% info can contain the fields listed below. Many of these fields are
+% required for all analyses, and some are specific to certain use cases
+% (e.g. doing signal detection theory analysis). See the section "FIELDS 
+% AND SETTINGS FOR SPECIFIC USE CASES" below for more on that.
+%
+% Most fields have sensible default values, such that you only need to 
+% specify a handful of fields that are unique to your use case, and allow 
+% the rest to take on their default values. The only field with no default 
+% value that must be defined manually is info.DV.
+%
+% After manually defining your fields of interest, use the function 
+% RPF_update_Fx_info to set the rest of the fields to their defaults. This
+% function also requires you to pass in trialData as an input (see
+% RPF_guide('trialData')).
+%
 % GENERAL FIELDS AND SETTINGS
-% 
-% info.PF_type 
-%   - a string describing whether this is an ordinary or relative PF
-%   - note that in most use cases, the user will only need to manually
-%     define the info struct for F(x), with the info struct for R being
-%     determined automatically by RPF_get_R
-%
-%   values
-%   - 'F(x)' --> ordinary PF of the form P = F(x) where P is performance and
-%     x is stimulus strength.
-%   - 'R(P1)' --> relative PF of the form P2 = R(P1) where P1 and P2 are
-%     different performance variables
-%   * DEFAULT = 'F(x)'
 %
 % info.DV 
 %   - a string denoting the dependent variable for P = F(x)
@@ -37,6 +43,19 @@
 %   - 'RT'
 %   * NO DEFAULT - must be defined manually
 %
+% info.PF_type 
+%   - a string describing whether this is an ordinary or relative PF
+%   - note that in most use cases, the user will only need to manually
+%     define the info struct for F(x), with the info struct for R being
+%     determined automatically by RPF_get_R
+%
+%   values
+%   - 'F(x)' --> ordinary PF of the form P = F(x) where P is performance and
+%     x is stimulus strength.
+%   - 'R(P1)' --> relative PF of the form P2 = R(P1) where P1 and P2 are
+%     different performance variables
+%   * DEFAULT = 'F(x)'
+%
 % info.PF
 %   - a function handle for the psychometric function F(x) to be fitted
 %   - see the function RPF_get_PF_list for lists of PFs organized by
@@ -52,6 +71,8 @@
 %    @RPF_scaled_logQuick
 %  - special case for fitting mean rating: @RPF_meanRating_PF
 %  - special case for interpolation: @RPF_interp_Fx
+%  - use RPF_get_PF_list to get listings of PFs available in the RPF toolbox 
+%    organized by various characteristics
 %  * DEFAULT is set to
 %      - @RPF_interp_Fx if info.fit_type is 'interp'
 %      - @PAL_Weibull if info.DV is a probability
@@ -61,9 +82,10 @@
 %
 %  usage
 %  - if fitting p(response), p(correct), or p(high rating), use one of the
-%    Palamdes toolbox functions as returned by RPF_get_PF_list('PFs_Palamedes')
+%    PFs for fitting response probabilities, as returned by 
+%    RPF_get_PF_list('PFs_respProb')
 %  - if fitting d', meta-d', type 2 AUC, or RT, or if fitting mean rating 
-%    via SSE, use one of the scaled psychometric functions as returned by 
+%    via SSE, use one of the scaled PFs as returned by 
 %    RPF_get_PF_list('PFs_scaled')
 %  - if fitting mean rating via MLE, use @RPF_meanRating_PF
 %  - if interpolating, use @RPF_interp_Fx
@@ -79,53 +101,40 @@
 %   - 'interp' ~ interpolation
 %   - 'SSE'    ~ minimize sum of squared errors
 %   * DEFAULT value depends on info.PF:
-%     - info.PF is 'RPF_interp_Fx' --> default is 'interp'
+%     - info.PF is 'RPF_interp_Fx'      --> default is 'interp'
 %     - info.PF is 'type 2 AUC' or 'RT' --> default is 'SSE'
-%     - all other values of info.PF --> default is 'MLE'
+%     - all other values of info.PF     --> default is 'MLE'
 %
 % info.x_vals
-%   - a vector of the unique values for stimulus strength x (PRIOR TO any 
-%     transforms such as e.g. a log10 transform) for which the dependent 
-%     variable info.DV is defined. must be sorted in ascending order
+%   - a vector of the unique values for stimulus strength x. these must be 
+%     sorted in ascending order
 %   - these x values correspond to the values of the dependent variable at
 %     each level of stimulus strength as stored in F.data(i_cond).P. note that 
 %     for dependent variables that are undefined at x = 0 (e.g. p(correct)
 %     for grating tilt discrimination when grating contrast = 0),
 %     info.x_vals should omit x = 0 so that the length of info.x_vals
 %     matches the length of F.data(i_cond).P
-%   - NOTE: x values should be on a scale such that the value x = 0
-%     corresponds to the minimal possible stimulus strength, at which the
-%     subject achieves chance rates of psychometric performance, since this 
-%     behavior is assumed by the psychometric functions available here, such 
-%     as the Weibull. if your x data do not have x = 0 as this minimum value 
-%     correspoding to chance-level performace, you should transform your x 
-%     values PRIOR TO entry to the RPF toolbox, so that psychometric
-%     function fits on untransformed x values will yield chance-level 
-%     responding at x = 0 as intended. for instance, if your x data are in 
-%     the form of a ratio with 1 as the minimum value, consider a transformation 
-%     that converts x = 1 to x = 0, e.g. log10(x). note that this transformation 
-%     would be applied PRIOR TO any subsequent transformations of x managed 
-%     by the RPF toolbox using info.xt_fn (see below)
+%   - see RPF_guide('trialData') for more information on how x values
+%     should be defined in the RPF toolbox
 %   * DEFAULT depends on info.DV
 %     - if info.DV depends on measuring accuracy ('p(correct)', 'd''', 'meta-d''', 
 %       or 'type 2 AUC') then info.x_vals defaults to unique values of 
 %       trialData.x for which trialData.stimID ~= 0.5, which is the value of 
 %       stimID used to indicate an undefined stimulus ID (e.g. grating tilt is 
-%       undefined when grating contrast = 0)
+%       undefined when grating contrast = 0). see RPF_guide('trialData')
+%       for further discussion
 %     - otherwise, info.x_vals defaults to all unique values of trialData.x
-%     - Inf and Nan values of trialData.x are automatically removed in this
-%       calculation
+%       after removal of any Inf and Nan values
 %
 % info.x_min and info.x_max
-%   - minimum and maximum values for stimulus strength x, PRIOR TO any 
-%     transforms such as e.g. a log10 transform
+%   - minimum and maximum values for stimulus strength x
 %   - these values are used to define the default lower and upper bounds
 %     for the RPF P2 = R(P1) over which AUC can be computed for all conditions, 
-%     where the lower bound of P1 is defined as the maximum across-condition 
-%     value of P1 at x_min, and the upper bound of P1 is defined as the 
-%     minmum across-condition value of P1 at x_max. these values are stored 
-%     in R.info.max_P1_at_x_min and R.info.min_P1_at_x_max, respectively, 
-%     in the R struct returned by RPF_get_R. 
+%     where the default lower bound of P1 is defined as the maximum across-
+%     condition value of P1 at x_min, and the default upper bound of P1 is 
+%     defined as the minimum across-condition value of P1 at x_max. these 
+%     values are stored in R.info.max_P1_at_x_min and R.info.min_P1_at_x_max, 
+%     respectively, in the R struct returned by RPF_get_R. 
 %   - info.x_min and info.x_max are also used to define the default lower
 %     and upper bounds of the plots of F1(x) and F2(x) in RPF_plot
 %   - setting info.x_min to a value greater than min(info.x_vals) and 
@@ -135,6 +144,8 @@
 %     info.x_max to a value greater than max(info.x_vals) allows for
 %     extrapolation of a psychometric function fit beyond the range of
 %     info.x_vals to enter into the RPF analysis.
+%   - see RPF_guide('trialData') for more information on how x values
+%     should be defined in the RPF toolbox
 %   * DEFAULT is the min and max values of trialData.x containing valid
 %     values for trialData.stimID (= 0, 1, or 0.5) after removing any Inf 
 %     and Nan values
@@ -142,24 +153,29 @@
 %     values possible for the stimulus (e.g. for contrast, x_min = 0 and
 %     x_max = 1), provided that the values in info.x_vals are not too far
 %     from these extremes. this allows AUC analysis and plotting over the
-%     broadest range possible. however, note that for interpolation, x_min
-%     and x_max should not exceed min(x_vals) and max(x_vals). 
+%     broadest range possible. 
+%
+%     however, note that for interpolation, x_min and x_max should not 
+%     exceed min(x_vals) and max(x_vals), since interpolation cannot 
+%     extrapolate beyond observed data (but see the "Interpolation" section 
+%     below for optional appending of interpolation data corresponding to 
+%     known minimum and/or maximum (x, P) pairs).
 %
 % info.xt_fn
 %   - a function handle determining any transform applied to x for use with
 %     info.PF, e.g. @log10 for a log transform.
-%   * DEFAULT determined from info.PF by the function RPF_get_PF_xt_fn.
+%   - if no transform for x is needed, set xt_fn = @(x)(x), i.e. the
+%     identity function.
+%   * DEFAULT determined from info.PF using the function RPF_get_PF_xt_fn.
 %     for any PF that assumes a log10 x-axis, the default for
 %     info.xt_fn is @log10. for all other functions, the default for 
-%     xt_fn is @(x)(x), i.e. the identity function. PFs that assume a
-%     log10 x-axis are 'PAL_Logistic', 'PAL_Gumbel', 'PAL_logQuick', 
-%     'PAL_CumulativeNormal', 'PAL_HyperbolicSecant', 'RPF_scaled_Gumbel', 
-%     and 'RPF_scaled_logQuick'
+%     xt_fn is @(x)(x). PFs that assume a log10 x-axis can be listed via 
+%     RPF_get_PF_list('PFs_log').
 %
 % info.xt_fn_inv
 %   - a function handle for the inverse of info.xt_fn, e.g. @(x)(10.^x)
 %     for the inverse of @log10.
-%   * DEFAULT determined from info.PF by the function RPF_get_PF_xt_fn.
+%   * DEFAULT determined from info.PF using the function RPF_get_PF_xt_fn.
 %     for PFs assuming a log10 x-axis, xt_fn_inv defaults to
 %     @(x)(10.^x). for all other functions, xt_fn_inv defaults to 
 %     @(x)(x), i.e. the identity function.
@@ -185,7 +201,7 @@
 %       function RPF_default_searchGrid_scaled
 %     - to set the lower and upper bounds for the omega parameter of scaled
 %       PFs (which sets the PF's asymptotic value)
-%     - to define default plotting options in the function RPF_plot
+%     - to define default plotting settings in the function RPF_plot
 %   * DEFAULT values depend on info.DV:
 %     - 'p(response)'    ~ [0, 1]
 %     - 'p(correct)'     ~ [0.5, 1]
@@ -208,6 +224,8 @@
 %
 % info.cond_vals
 %   - numerical vector of the condition label values, if any
+%   - see RPF_guide('trialData') for more information on how condition values
+%     should be defined in the RPF toolbox
 %   * DEFAULT determined from trialData.condition. If there are no
 %     conditions, default value is 0.
 % 
@@ -225,6 +243,8 @@
 % info.nRatings
 %   - number of ratings in the rating scale (e.g. for confidence,
 %     awareness, etc.)
+%   - see RPF_guide('trialData') for more information on how rating values
+%     should be defined in the RPF toolbox
 %   * DEFAULT determined from trialData.rating. If there are no ratings,
 %     default value is 1.
 %
@@ -247,9 +267,9 @@
 %   - if your data set includes presentations of stimuli where x == info.x_min
 %     but stimID is undefined (e.g. as in a spatial 2AFC discrimination
 %     task where contrast = 0), then it is possible that one of the functions 
-%     in your RPF analysis will be undefined at x_min and other will have a 
-%     defined value. DVs that measure or depend on accuracy are undefined 
-%     when stimID is undefined, included 'p(correct)', 'd''', 'meta-d''',
+%     in your RPF analysis will be undefined at x_min and the other will have 
+%     a defined value. DVs that measure or depend on accuracy are undefined 
+%     when stimID is undefined, including 'p(correct)', 'd''', 'meta-d''',
 %     and 'type 2 AUC'. DVs that do not measure or depend on accuracy can
 %     still be defined when stimID is undefined, including 'p(response)', 
 %     'p(high rating)', 'mean rating', and 'RT'. if your RPF analysis uses
@@ -273,20 +293,26 @@
 %   - similar considerations hold for info.x_max
 %
 %
-% ---------------------------------------
-% Response condition for type 2 variables
-% ---------------------------------------
-% These considerations hold if info.DV is any of the following type 2 variables:
-% 'p(high rating)', 'mean rating', 'type 2 AUC', 'meta-d'''
+% --------------------------
+% Response-specific analysis
+% --------------------------
+% It may be of interest to limit the analysis to trials where a specific
+% type 1 response was given. For instance, in a detection task where "S2" 
+% responses indicate detection of the target stimulus, it may be of interest 
+% to analyze p(high rating) only for trials where the subject detected the 
+% stimulus, i.e. only for trials where the subject responded "S2". 
 %
-% Additionally, response-specific analysis can also be conducted for the
-% following non-type-2 variables in info.DV:
-% 'p(correct)', 'RT'
+% Response-specific analysis can be conducted in the following cases, by 
+% setting the appropriate value for info.DV_respCond:
+% - if info.DV is any of the following type 2 variables:
+%   'p(high rating)', 'mean rating', 'type 2 AUC', 'meta-d'''
+% - if info.DV is any of the following non-type-2 variables:
+%   'p(correct)', 'RT'
 %
 % info.DV_respCond
-%   - determines which response types should be used for the type 2
-%     variable, i.e. whether we should restrict the analysis to "S1" or
-%     "S2" responses, or include all responses
+%   - determines which response types should be used for the data analysis, 
+%     i.e. whether we should restrict the analysis to "S1" or "S2" responses, 
+%     or include all responses
 %
 %   values
 %   - 'rS1' ~ conduct a response-specific analysis for "S1" responses
@@ -298,6 +324,11 @@
 % ----------------------------
 % Threshold for p(high rating)
 % ----------------------------
+% For rating scales with more than two options, there are more than one way
+% to binarize the rating scale into "low" and "high" ratings which can then
+% be used to compute p(high rating). The cutoff for what is considered to
+% be a "high" rating is specified in info.DV_thresh.
+%
 % info.DV_thresh
 %   - threshold rating value used to define high ratings, i.e. 
 %     p(high rating) = p(rating >= info.DV_thresh)
@@ -312,6 +343,8 @@
 %     as to best balance the trial counts for "low" and "high" ratings 
 %     across all trials and conditions in trialData. this is calculated in 
 %     the function RPF_get_thresh_for_med_split
+%   - otherwise, info.DV_thresh_type is ignored and info.DV_thresh is
+%     assumed to have been manually specified
 %   * DEFAULT value is 'median split' if info.DV_thresh is not specified,
 %     and 'pre-specified' otherwise
 %
@@ -319,30 +352,56 @@
 % -------------------
 % Fitting mean rating
 % -------------------
+% Fitting mean rating using MLE requires specification of a special
+% psychometric function that separately conducts MLE fits of PFs for 
+% p(rating >= thresh) for all values of thresh in [2, nRatings] and then
+% combines these.
+%
 % info.PF
 %   - for MLE fitting, info.PF must be set to @RPF_meanRating_PF
-%   - for SSE fitting, info.PF can be any of the scaled PFs, i.e. 
-%     @RPF_scaled_Weibull, @RPF_scaled_Gumbel, @RPF_scaled_Quick, 
-%     @RPF_scaled_logQuick
+%   - for SSE fitting, info.PF can be any of the scaled PFs as returned by
+%     RPF_get_PF_list('PFs_scaled')
 % 
 % info.PF_pHighRating
 %   - this is an additional PF function handle determining which PF is used
 %     to fit the component PFs p(rating >= 2), p(rating >= 3), ...,
 %     p(rating >= info.nRatings) using MLE. these component PFs are used to 
 %     construct the mean rating PF.
+%   - this should be one of the PFs returned by RPF_get_PF_list('PFs_respProb')
 %   - this field is only applicable for MLE fitting of mean rating. it does
 %     not need to be specified for SSE fitting.
 %
 % ----------------------
 % Fitting d' and meta-d'
 % ----------------------
-% Many cell padding settings for working with d' and meta-d' default to
-% being turned off to ensure that if these settings are used, the user is
-% explicitly aware of that fact. Nonetheless, for most use cases it is
-% likely that at least some data for at least some subjects will contain
-% issues that require cell padding to prevent numerical issues in SDT
-% analysis. Therefore, as a quick summary, it is recommended to specify the
-% following settings when analyzing d' or meta-d' in the RPF toolbox:
+% In signal detection theory analyses of d' and meta-d', it is common for
+% raw data to pose problems for the analysis. For instance, d' is infinite
+% if hit rate = 1 or false alarm rate = 0, and meta-d' is undefined if any
+% cells of the response count variables nR_S1 and nR_S2 are zero, or if d'
+% = 0. (For more on nR_S1 and nR_S2, see RPF_guide('counts').) These issues 
+% can be circumvented by introducing a small degree of "cell padding" to 
+% prevent numerical issues while minimally affecting the results of the data 
+% analysis.
+%
+% This cell padding approach is a generalization of the correction for 
+% estimation issues of type 1 d' recommended in
+% 
+% Hautus, M. J. (1995). Corrections for extreme proportions and their biasing 
+%     effects on estimated values of d'. Behavior Research Methods, Instruments, 
+%     & Computers, 27, 46-51.
+%     
+% When using this correction method, it is recommended to use the same cell 
+% padding for all data of all subjects, even for those subjects whose data is 
+% not in need of such correction, in order to avoid biases in the analysis 
+% (cf Snodgrass & Corwin, 1988).
+%
+% Many of the cell padding settings for working with d' and meta-d' listed 
+% below default to being turned off to ensure that if these settings are 
+% used, the user is explicitly aware of that fact. Nonetheless, for most use 
+% cases it is likely that at least some data for at least some subjects 
+% require cell padding to prevent numerical issues in SDT analysis. Therefore, 
+% as a quick summary, it is recommended to specify the following settings 
+% when analyzing d' or meta-d' in the RPF toolbox:
 %
 % info.padCells                       = 1;
 % info.padCells_correctForTrialCounts = 1;
@@ -350,11 +409,16 @@
 % info.set_P_min_to_d_pad_min         = 1;
 % info.set_P_max_to_d_pad_max         = 1;
 %
-% Alternatively, a shorthand option is to set
-% 
-% info.useAllPaddingSettings = 1;
+% Alternatively, a shorthand option is to set info.useAllPaddingSettings =
+% 1 (see below).
 % 
 % A more detailed consideration of individual settings is included below.
+%
+% info.padInfo
+%   - a 1 x nCond struct array containing information on the cell padding
+%     settings which will be used in each condition
+%   - automatically generated when info.DV is d', meta-d', or type 2 AUC
+%   - see RPF_guide('padInfo') for more details
 % 
 % info.useAllPaddingSettings
 %   - a boolean controlling whether to default all padding settings to be
@@ -370,8 +434,8 @@
 % info.padCells
 %   - boolean controlling whether response count cells nR_S1 and nR_S2 are 
 %     padded to prevent 0s from interfering with the analysis results
-%   * DEFAULT is 0, but recommended value is 1 if any cells in nR_S1 or 
-%     nR_S2 for any subject in the analysis are 0
+%   * DEFAULT is 0, but recommended value is 1 for ALL subjects if numerical 
+%     issues in the SDT analysis arise for ANY subject
 %
 % info.padAmount
 %   - amount to add to every cell of nR_S1 and nR_S2 if info.padCells == 1
@@ -385,11 +449,10 @@
 %     due to the task being a 'detect x' task in which the number of S1 trials 
 %     at x=0 may differ from the number of S2 trials for each level of x > 0,
 %     then using a fixed padAmount can differentially affect S1 and S2
-%     stimuli and thereby introduce biases into SDT calculations e.g. of
-%     d'. 
+%     stimuli and thereby introduce biases into SDT calculations e.g. of d'. 
 % 
 %     this correction works by first determining which of nTrialsPerX_S1
-%     and nTrialsPerX_S2 is larger, where nTrialsPerX_S1 and and nTrialsPerX_S2 
+%     and nTrialsPerX_S2 is larger, where nTrialsPerX_S1 and nTrialsPerX_S2 
 %     are the number of trials per level of stimulus x for S1 and S2 stimuli, 
 %     respectively. info.padAmount is used as the padAmount for the
 %     stimulus with higher trial count, and the padAmount for the stimulus
@@ -403,8 +466,10 @@
 %     such that the padAmount for S2 is lower than that for S1 by the same
 %     proportion as the trial counts per level of x are lower for S2 than
 %     for S1. this ensures e.g. that if S1 and S2 have imbalanced trial
-%     counts, then padding will not result in non-zero values of d' when
-%     the uncorrected HR is equal to the uncorrected FAR.
+%     counts, then padding will not bias calculation of d' and meta-d'. for 
+%     instance, without this correction, imbalanced trial counts could result 
+%     in non-zero values of d' even when the uncorrected HR is equal to the 
+%     uncorrected FAR, which should result in d' = 0.
 % 
 %   * DEFAULT is 0, but recommended value is 1 if S1 and S2 stimuli have 
 %     imbalanced trial counts per level of x.
@@ -414,6 +479,9 @@
 %     padded to prevent a value of d' = 0 from interfering with meta-d'
 %     analysis (meta-d' is undefined when d' = 0 since fitting meta-d'
 %     requires using c' = c/d')
+%   - this is done by adding a very small amount (info.padAmount_nonzero_d) 
+%     to response counts for correct rejections and hits, i.e. nR_S1(1:nRatings) 
+%     and nR_S2(nRatings+1:end), if info.padCells_nonzero_d == 1
 %   * DEFAULT is 0, but recommended value is 1 if any conditions in the
 %     data to be fitted yield d' = 0
 % 
@@ -423,9 +491,8 @@
 %   * DEFAULT is 1e-4
 % 
 % info.PF
-%   - this should be set to one of the "scaled" PFs, i.e.
-%    @RPF_scaled_Weibull, @RPF_scaled_Gumbel, @RPF_scaled_Quick, 
-%    @RPF_scaled_logQuick
+%   - this should be set to one of the "scaled" PFs as returned by
+%     RPF_get_PF_list('PFs_scaled')
 % 
 % info.set_P_min_to_d_pad_min
 %   - boolean controlling whether info.P_min is set to info.padInfo.d_pad_min 
@@ -454,7 +521,7 @@
 %
 %     where nTrialsPerX_S1 and and nTrialsPerX_S2 are the number of trials 
 %     per level of stimulus x for S1 and S2 stimuli, respectively, and 
-%     nRatings and padAmount_nonzero_d are defined as in the info.nRatings 
+%     nRatings and padAmount_nonzero_d are defined as in info.nRatings 
 %     and info.padAmount_nonzero_d, and padAmount_S1 and padAmount_S2 are 
 %     determined by info.padAmonut and info.padCells_correctForTrialCounts.
 %     
@@ -480,9 +547,9 @@
 %   - for d' estimated with cell padding, it is thus recommended to define 
 %     info.P_max and info.P_min to correspond to the max and min values
 %     possible with the specified padding settings. this can be achieved by
-%     setting declining to specify values for info.P_min and info.P_max, and 
-%     insetad setting info.set_P_max_to_pad_max == 1 and 
-%     info.set_P_max_to_pad_max == 1, as noted above. 
+%     declining to specify values for info.P_min and info.P_max, and insetad 
+%     setting info.set_P_max_to_pad_max == 1 and  info.set_P_max_to_pad_max 
+%     == 1, as noted above. 
 %
 %   - for meta-d' estimated with cell padding, you may also want to use
 %     these settings, if it is appropriate in your data set to assume that 
@@ -493,4 +560,10 @@
 %   - if not using cell padding in the estimation of d' or meta-d', then:
 %     - the recommended value for info.P_min is 0
 %     - the recommended value for info.P_max is a large signal-to-noise ratio 
-%       value, such as 5. adjust as needed for your data and use case.
+%       value, such as 5. technically there is no upper limit on d' or meta-d' 
+%       values, but in practice it is useful to define a finite value for 
+%       P_max corresponding to very high but reasonable performance. for 
+%       instance, for unbiased responding, p(correct) can be computed as 
+%       normcdf(d'/2), and so d'=5 corresponds to p(correct) = 0.994, very 
+%       close to the "true" maximum value of p(correct) = 1 at which d' = Inf. 
+%       adjust P_max as needed for your data and use case.
