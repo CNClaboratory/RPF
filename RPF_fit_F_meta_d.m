@@ -1,20 +1,5 @@
-function fit = RPF_fit_F_meta_d(info, data, constrain, searchGrid_scaled)
-% fit = RPF_fit_F_meta_d(info, data, constrain, searchGrid_scaled)
-
-%% set default values
-
-if ~exist('constrain', 'var')
-    constrain = [];
-end
-
-if ~exist('searchGrid_scaled', 'var') || isempty(searchGrid_scaled)
-    searchGrid_scaled = RPF_default_searchGrid_scaled(constrain, info.xt_fn, info.P_min, info.P_max);
-end
-
-paramsFree = RPF_get_paramsFree(constrain);
-
-
-%% fit Weibull
+function fit = RPF_fit_F_meta_d(info, data)
+% fit = RPF_fit_F_meta_d(info, data)
 
 fit  = [];
 
@@ -28,13 +13,13 @@ for i_cond = 1:length(data)
     end
     
     fit(i_cond).fit_type   = info.fit_type;
-    fit(i_cond).constrain  = constrain;
+    fit(i_cond).constrain  = info.constrain;
     fit(i_cond).PF         = info.PF;
     fit(i_cond).xt_fn      = info.xt_fn;
     fit(i_cond).xt_fn_inv  = info.xt_fn_inv;
 
     % perform the fit
-    [fit(i_cond).params_all, fit(i_cond).logL] = RPF_PFML_meta_d_fit(data(i_cond).xt, data(i_cond), searchGrid_scaled, paramsFree, fit(i_cond).PF, info);
+    [fit(i_cond).params_all, fit(i_cond).logL] = RPF_PFML_meta_d_fit(data(i_cond).xt, data(i_cond), info);
 
     % unpack parameters
     fit(i_cond).params  = fit(i_cond).params_all(1:4);
@@ -59,8 +44,8 @@ for i_cond = 1:length(data)
     % adjust t2c so they're centered around meta_c instead of 0
     fit(i_cond).meta_t2c = meta_t2c + fit(i_cond).meta_c';    
     
-    fit(i_cond).k     = sum(paramsFree);
-    fit(i_cond).k_all = sum(paramsFree) + numel(meta_t2c);
+    fit(i_cond).k     = sum(info.paramsFree);
+    fit(i_cond).k_all = sum(info.paramsFree) + numel(meta_t2c);
     
     switch data(i_cond).DV_respCond
         case 'all'

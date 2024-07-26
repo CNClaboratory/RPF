@@ -428,6 +428,7 @@ if ~isfield(info, 'P_max') || isempty(info.P_max)
     info.P_max  = P_max;
 end
 
+
 %% x label
 
 if ~isfield(info, 'x_label') || isempty(info.x_label)
@@ -440,7 +441,7 @@ end
 if ~isfield(info, 'P_label') || isempty(info.P_label)
    
     str_respCond = '';
-    if any( strcmp(info.DV, {'p(high rating)', 'mean rating', 'type 2 AUC', 'meta-d'''}) )
+    if any( strcmp(info.DV, {'p(high rating)', 'mean rating', 'type 2 AUC', 'meta-d''', 'RT'}) )
         if strcmp(info.DV_respCond, 'rS1')
             str_respCond = ' for resp="S1"';
         elseif strcmp(info.DV_respCond, 'rS2')
@@ -458,5 +459,46 @@ end
 if ~isfield(info, 'cond_labels') || isempty(info.cond_labels)
     for i_cond = 1:length(info.cond_vals)
         info.cond_labels{i_cond} = ['cond = ' num2str(info.cond_vals(i_cond))];
+    end
+end
+
+
+%% constrain
+
+if ~isfield(info, 'constrain')
+    info.constrain = [];
+    
+elseif isstruct(info.constrain) && isfield(info.constrain, 'value')
+    if isfield(info.constrain.value, 'gamma') && strcmp(info.constrain.value.gamma, 'P_min')
+        info.constrain.value.gamma = info.P_min;
+    end
+    
+    if isfield(info.constrain.value, 'omega') && strcmp(info.constrain.value.omega, 'P_max')
+        info.constrain.value.omega = info.P_max;
+    end
+end
+
+info.paramsFree = RPF_get_paramsFree(info.constrain);
+
+
+%% searchGrid
+
+if ~isfield(info, 'searchGrid') || isempty(info.searchGrid)
+    switch info.fit_type
+        case 'interp'
+            info.searchGrid = [];
+
+        case 'SSE'
+            info.searchGrid = RPF_default_searchGrid_scaled(info);
+
+        otherwise
+
+            switch info.DV
+                case {'p(correct)', 'p(response)', 'p(high rating)', 'mean rating'}
+                    info.searchGrid = RPF_default_searchGrid(info);
+
+                case {'d''', 'meta-d''', 'type 2 AUC', 'RT'}
+                    info.searchGrid = RPF_default_searchGrid_scaled(info);
+            end
     end
 end

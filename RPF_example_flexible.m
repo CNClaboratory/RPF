@@ -33,10 +33,10 @@ load trialData_example_discrim.mat
 
 %%%%% F1 settings %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-F1_DV = 1;          % select DV for F1
+F1_DV = 2;          % select DV for F1
                     % 1 = p(correct), 2 = d', 3 = p(response)
 
-F1_fit = 3;         % select fit type for F1
+F1_fit = 1;         % select fit type for F1
                     % 1 = MLE, 2 = SSE, 3 = interp
 
 F1_extrapolate = 1; % options for setting the x-range over which F1 is evaluated
@@ -56,7 +56,7 @@ F2_DV = 3;          % select DV for F2
 F2_DV_respCond = 3; % select DV response condition for F2
                     % 1 = "S1" responses, 2 = "S2" responses, 3 = all responses
 
-F2_fit = 3;         % select fit type for F2
+F2_fit = 1;         % select fit type for F2
                     % 1 = MLE, 2 = SSE, 3 = interp
 
 F2_extrapolate = 1; % options for setting the x-range over which F2 is evaluated  
@@ -83,18 +83,18 @@ F2.info.DV = type2_DVs{F2_DV};
 F2.info.DV_respCond = DV_respConds{F2_DV_respCond};
 F2.info.fit_type = fit_types{F2_fit};
 
+F1.info.constrain = [];
+
 
 %% F1 - define info and data
 % in this section, further automated setup is conducted based on the manual
 % settings above, but the details of the automated setup can also be
 % changed if desired
 
-constrain1 = [];
 
 switch F1.info.DV
     case 'd'''
-        F1.info.padCells = 1;
-        F1.info.padCells_nonzero_d = 1;
+        F1.info.useAllPaddingSettings = 1;
 
         if F1_use_log_PF
             F1.info.PF = @RPF_scaled_Gumbel;
@@ -102,11 +102,12 @@ switch F1.info.DV
             F1.info.PF = @RPF_scaled_Weibull;
         end
         
-        constrain1.value.gamma = 0;
+        F1.info.constrain.value.gamma = 'P_min';
+        F1.info.constrain.value.omega = 'P_max';
         
     otherwise % below applies to both p(correct) and p(response)
         if strcmp(F1.info.DV, 'p(correct)')
-            constrain1.value.gamma = 0.5;
+            F1.info.constrain.value.gamma = 0.5;
         end
         
         if F1_use_log_PF
@@ -138,13 +139,8 @@ F1.info = RPF_update_info(F1.info, trialData);
 % get data
 F1.data = RPF_get_F_data(F1.info, trialData);
 
-if isfield(F1.data(1), 'padInfo') && isfield(F1.data(1).padInfo, 'd_pad_max')
-    F1.info.P_max          = max( [F1.data.d_pad_max] );
-    constrain1.value.omega = max( [F1.data.d_pad_max] );
-end
-
 % fit
-F1.fit = RPF_fit_F(F1.info, F1.data, constrain1);
+F1.fit = RPF_fit_F(F1.info, F1.data);
 
 
 %% F2 - define info and data
@@ -152,7 +148,7 @@ F1.fit = RPF_fit_F(F1.info, F1.data, constrain1);
 % settings above, but the details of the automated setup can also be
 % changed if desired
 
-constrain2 = [];
+F2.info.constrain = [];
 
 switch F2.info.DV
     case 'mean rating'
@@ -173,15 +169,28 @@ switch F2.info.DV
             F2.info.PF_pHighRating = @PAL_Weibull;
         end
         
-    case {'meta-d''', 'type 2 AUC'}
-        F2.info.padCells = 1;
-        F2.info.padCells_nonzero_d = 1;
+    case 'meta-d'''
+        F2.info.useAllPaddingSettings = 1;
+        F2.info.constrain.value.gamma = 'P_min';
+        F2.info.constrain.value.omega = 'P_max';
+        
         if F2_use_log_PF
             F2.info.PF = @RPF_scaled_Gumbel;
         else        
             F2.info.PF = @RPF_scaled_Weibull;
         end
 
+    case 'type 2 AUC'
+        F2.info.useAllPaddingSettings = 1;
+        F2.info.constrain.value.gamma = 0.5;
+        F2.info.constrain.value.omega = 1;
+
+        if F2_use_log_PF
+            F2.info.PF = @RPF_scaled_Gumbel;
+        else        
+            F2.info.PF = @RPF_scaled_Weibull;
+        end
+        
     case 'RT'
         if F2_use_log_PF
             F2.info.PF = @RPF_scaled_Gumbel;
@@ -217,23 +226,8 @@ F2.info = RPF_update_info(F2.info, trialData);
 % get data
 F2.data = RPF_get_F_data(F2.info, trialData);
 
-
-if strcmp(F2.info.DV, 'meta-d''')
-    
-    constrain2.value.gamma = 0;
-    
-    if isfield(F2.data(1), 'd_pad_max')
-        F2.info.P_max          = max( [F2.data.d_pad_max] );
-        constrain2.value.omega = max( [F2.data.d_pad_max] );
-    end
-    
-elseif strcmp(F2.info.DV, 'type 2 AUC')
-    constrain2.value.gamma = 0.5;
-    constrain2.value.omega = 1;
-end
-
 % fit
-F2.fit = RPF_fit_F(F2.info, F2.data, constrain2);
+F2.fit = RPF_fit_F(F2.info, F2.data);
 
 
 
@@ -246,8 +240,8 @@ R     = RPF_get_R(F1, F2, P1_LB, P1_UB);
 
 
 % plot RPF analysis
-% plotSettings.all.set_title_param = 1;
-plotSettings.R.set_title_AUC = 1;
+plotSettings.all.set_title_param = 1;
+% plotSettings.R.set_title_AUC = 1;
 plotSettings.F{1}.set_legend = 1;
 plotSettings.str_sgtitle     = 'RPF\_example\_flexible plot';
 

@@ -1,20 +1,5 @@
-function fit = RPF_fit_F_prob(info, data, constrain, searchGrid)
-% fit = RPF_fit_F_prob(info, data, constrain, searchGrid)
-
-%% set default values
-
-if ~exist('constrain', 'var')
-    constrain = [];
-end
-
-if ~exist('searchGrid', 'var') || isempty(searchGrid)
-    searchGrid = RPF_default_searchGrid(constrain, info.xt_fn);
-end
-
-paramsFree = RPF_get_paramsFree(constrain);
-
-
-%% fit PF
+function fit = RPF_fit_F_prob(info, data)
+% fit = RPF_fit_F_prob(info, data)
 
 fit  = [];
 
@@ -28,15 +13,15 @@ for i_cond = 1:length(data)
     end
     
     fit(i_cond).fit_type   = info.fit_type;
-    fit(i_cond).constrain  = constrain;
+    fit(i_cond).constrain  = info.constrain;
     fit(i_cond).PF         = info.PF;
     fit(i_cond).xt_fn      = info.xt_fn;
     fit(i_cond).xt_fn_inv  = info.xt_fn_inv;
     
     [fit(i_cond).params, fit(i_cond).logL] = PAL_PFML_Fit(fit(i_cond).xt_fn(data(i_cond).x), ...
                                                           data(i_cond).forMLE.nPos, data(i_cond).forMLE.nTot, ...
-                                                          searchGrid, paramsFree, fit(i_cond).PF);
+                                                          info.searchGrid, info.paramsFree, fit(i_cond).PF);
 
-    fit(i_cond).k = sum(paramsFree);
+    fit(i_cond).k = sum(info.paramsFree);
     fit(i_cond).n = sum(data(i_cond).forMLE.nTot);
 end

@@ -248,6 +248,23 @@
 %   * DEFAULT determined from trialData.rating. If there are no ratings,
 %     default value is 1.
 %
+% info.constrain
+%   - struct specifying constraints (if any) to place on PF parameters when
+%     fitting the PF to the data
+%   - see RPF_guide('constrain') for more information
+%   * DEFAULT is []
+%
+% info.paramsFree
+%   - 1 x 4 array indicating whether the alpha, beta, gamma, lambda/omega
+%     parameters of the PF are free or fixed, where 1 means free and 0
+%     means fixed
+%   - e.g. paramsFree = [1 1 0 1] would indicate that gamma is fixed but
+%     all other parameters are free
+%
+% info.searchGrid
+%   - struct specifying the searchGrid used to initialize parameter
+%     estimates for the PF fitting algorithm
+%   - see RPF_guide('searchGrid') for more information
 % 
 % FIELDS AND SETTINGS FOR SPECIFIC USE CASES
 %

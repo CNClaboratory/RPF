@@ -4,7 +4,8 @@
 %
 % The constrain struct specifies what constraints (if any) should be placed
 % on the parameters of the psychometric function when being fitted to the
-% data.
+% data. It should be specified as a field of the info struct (see
+% RPF_guide('info') for more).
 %
 % Currently, constrain only supports setting a fixed a priori value for any
 % of the 4 psychometric function parameters of alpha, beta, gamma, and
@@ -26,7 +27,7 @@
 %
 % constrain.value.gamma
 %   - if specified as the string 'P_min', defaults to the value of
-%     info.P_min (see RPF_guide('info') for more)
+%     info.P_min when info is updated via RPF_update_info
 %   - if otherwise specified and not empty, the gamma parameter of the PF 
 %     fit will be constrained to equal constrain.value.gamma
 %   - accuracy-based DVs have a natural fixed value for gamma corresponding
@@ -42,7 +43,7 @@
 %
 % constrain.value.omega
 %   - if specified as the string 'P_max', defaults to the value of
-%     info.P_max (see RPF_guide('info') for more)
+%     info.P_max when info is updated via RPF_update_info
 %   - if otherwise specified and not empty, the omega parameter of the PF 
 %     fit will be constrained to equal constrain.value.omega
 %   - this constraint applies to PFs that fit scaled psychometric functions 

@@ -1,20 +1,5 @@
-function fit = RPF_fit_F_meanRating(info, data, constrain, searchGrid)
-% fit = RPF_fit_F_meanRating(info, data, constrain, searchGrid)
-
-%% set default values
-
-if ~exist('constrain', 'var')
-    constrain = [];
-end
-
-if ~exist('searchGrid', 'var') || isempty(searchGrid)
-    searchGrid = RPF_default_searchGrid(constrain, info.xt_fn);
-end
-
-paramsFree = RPF_get_paramsFree(constrain);
-
-
-%% fit PF
+function fit = RPF_fit_F_meanRating(info, data)
+% fit = RPF_fit_F_meanRating(info, data)
 
 fit  = [];
 
@@ -33,7 +18,7 @@ for i_cond = 1:length(data)
 
         % fit p(high rating) separately for each rating threshold and save
         % each fit in its own fit(i_cond).pHighRating(i_rating-1) struct
-        fit(i_cond).pHighRating(i_rating-1).constrain = constrain;
+        fit(i_cond).pHighRating(i_rating-1).constrain = info.constrain;
         fit(i_cond).pHighRating(i_rating-1).PF        = info.PF_pHighRating;
         fit(i_cond).pHighRating(i_rating-1).xt_fn     = info.xt_fn;
         
@@ -42,12 +27,12 @@ for i_cond = 1:length(data)
         nTot = data(i_cond).pHighRating(i_rating-1).forMLE.nTot;
         PF   = fit(i_cond).pHighRating(i_rating-1).PF;
 
-        [params, logL] = PAL_PFML_Fit(xt, nPos, nTot, searchGrid, paramsFree, PF);
+        [params, logL] = PAL_PFML_Fit(xt, nPos, nTot, info.searchGrid, info.paramsFree, PF);
 
         fit(i_cond).pHighRating(i_rating-1).params = params;
         fit(i_cond).pHighRating(i_rating-1).logL   = logL;
         
-        fit(i_cond).pHighRating(i_rating-1).k = sum(paramsFree);
+        fit(i_cond).pHighRating(i_rating-1).k = sum(info.paramsFree);
         fit(i_cond).pHighRating(i_rating-1).n = sum(data(i_cond).pHighRating(i_rating-1).forMLE.nTot);
         
         % reproduce parameter values in the standardized fit(i_cond).params field

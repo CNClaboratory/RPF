@@ -31,18 +31,19 @@ load trialData_example_discrim.mat
 
 %%%%% MANUAL SETTINGS FOR F1.info AND constrain1 %%%%%%%%%%%%%%%%%%%%%
 
-% for details on how to set up the info struct, see "help RPF_info"
-F1.info.DV          = 'd''';
-F1.info.PF          = @RPF_scaled_Weibull;
-F1.info.padCells    = 1;
-F1.info.x_min       = 0;
-F1.info.x_max       = 1;
-F1.info.x_label     = 'coherence';
-F1.info.cond_labels = {'low density', 'med density', 'high density'};
+% for details on how to set up the info struct, see RPF_guide('info')
+F1.info.DV                     = 'd''';
+F1.info.PF                     = @RPF_scaled_Weibull;
+F1.info.padCells               = 1;
+F1.info.set_P_max_to_d_pad_max = 1;
+F1.info.x_min                  = 0;
+F1.info.x_max                  = 1;
+F1.info.x_label                = 'coherence';
+F1.info.cond_labels            = {'low density', 'med density', 'high density'};
 
 % for info on the constrain struct, see RPF_guide('constrain')
-constrain1.value.gamma = 0;
-constrain1.value.omega = 'P_max';
+F1.info.constrain.value.gamma = 0;
+F1.info.constrain.value.omega = 'P_max';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -53,7 +54,7 @@ F1.info = RPF_update_info(F1.info, trialData);
 F1.data = RPF_get_F_data(F1.info, trialData);
 
 % fit data
-F1.fit = RPF_fit_F(F1.info, F1.data, constrain1);
+F1.fit = RPF_fit_F(F1.info, F1.data);
 
 
 %% analysis for P2 = F2(x)
@@ -68,7 +69,7 @@ F2.info.x_max       = 1;
 F2.info.x_label     = 'coherence';
 F2.info.cond_labels = {'low density', 'med density', 'high density'};
 
-constrain2          = [];
+F2.info.constrain   = [];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -79,7 +80,7 @@ F2.info = RPF_update_info(F2.info, trialData);
 F2.data = RPF_get_F_data(F2.info, trialData);
 
 % fit data
-F2.fit = RPF_fit_F(F2.info, F2.data, constrain2);
+F2.fit = RPF_fit_F(F2.info, F2.data);
 
 
 %% RPF analysis and plots

@@ -46,6 +46,7 @@
 % fit(i_cond).constrain
 %   - a struct containing information on what constraints to impose on the
 %     fitting of the psychometric function
+%   - identical to info.constrain
 %   - see RPF_guide('constrain') for more information
 %
 % fit(i_cond).PF

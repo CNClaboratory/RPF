@@ -1,5 +1,10 @@
-function [params, SSE] = RPF_PFSSE_scaled_fit(xt, data, searchGrid, paramsFree, PF, info)
-% [params, SSE] = RPF_PFSSE_scaled_fit(xt, data, searchGrid, paramsFree, PF, info)
+function [params, SSE] = RPF_PFSSE_scaled_fit(xt, data, info)
+% [params, SSE] = RPF_PFSSE_scaled_fit(xt, data, info)
+
+%% unpack
+
+searchGrid = info.searchGrid;
+PF         = info.PF;
 
 %% set up constraints for MLE estimation
 
@@ -10,8 +15,8 @@ LB = [info.xt_fn(0),     0,   0, info.P_min];
 UB = [info.xt_fn(Inf), Inf, Inf, info.P_max];
 
 paramNames = {'alpha', 'beta', 'gamma' 'omega'};
-for i = 1:length(paramsFree)
-    if ~paramsFree(i)
+for i = 1:length(info.paramsFree)
+    if ~info.paramsFree(i)
         LB(i) = eval(['searchGrid.' paramNames{i} ';']);
         UB(i) = LB(i);
     end

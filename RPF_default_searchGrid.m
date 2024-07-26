@@ -1,8 +1,10 @@
-function searchGrid = RPF_default_searchGrid(constrain, xt_fn)
-% searchGrid = RPF_default_searchGrid(constrain, xt_fn)
+function searchGrid = RPF_default_searchGrid(info)
+% searchGrid = RPF_default_searchGrid(info)
 
 
-%% define search grid
+%% 
+
+constrain = info.constrain;
 
 %% alpha
 
@@ -15,7 +17,7 @@ else
     searchGrid.alpha = .05:.05:3;
     
     % transform alpha according to the appropriate x transform
-    searchGrid.alpha = xt_fn( searchGrid.alpha );
+    searchGrid.alpha = info.xt_fn( searchGrid.alpha );
 end
 
 %% beta

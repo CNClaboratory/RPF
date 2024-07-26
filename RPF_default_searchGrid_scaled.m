@@ -1,8 +1,10 @@
-function searchGrid = RPF_default_searchGrid_scaled(constrain, xt_fn, P_min, P_max)
-% searchGrid = RPF_default_searchGrid_scaled(constrain, xt_fn, P_min, P_max)
+function searchGrid = RPF_default_searchGrid_scaled(info)
+% searchGrid = RPF_default_searchGrid_scaled(info)
 
 
-%% define search grid
+%% 
+
+constrain = info.constrain;
 
 %% alpha
 
@@ -15,7 +17,7 @@ else
     searchGrid.alpha = .05:.05:3;
     
     % transform alpha according to the appropriate x transform
-    searchGrid.alpha = xt_fn( searchGrid.alpha );
+    searchGrid.alpha = info.xt_fn( searchGrid.alpha );
 end
 
 %% beta
@@ -38,7 +40,7 @@ if isstruct(constrain) && isfield(constrain, 'value') && isfield(constrain.value
 else
     % leave gamma as free parameter
 %     searchGrid.gamma  = 0:.1:1;
-    searchGrid.gamma  = linspace(P_min, P_max, 10);
+    searchGrid.gamma  = linspace(info.P_min, info.P_max, 10);
 end
 
 %% omega
@@ -50,5 +52,5 @@ if isstruct(constrain) && isfield(constrain, 'value') && isfield(constrain.value
 else
     % leave omega as free parameter
 %     searchGrid.omega = 1:10;
-    searchGrid.omega  = linspace(P_min, P_max, 10);
+    searchGrid.omega  = linspace(info.P_min, info.P_max, 10);
 end
