@@ -1,5 +1,8 @@
 % RPF_guide_workflow
 %
+% Description of the overarching workflow of analyzing data with the RPF
+% toolbox.
+%
 % In the RPF toolbox, one can fit psychometric functions relating performance 
 % for two outcome measures P1 and P2 to stimulus strength x across multiple 
 % experimental conditions via the functions P1 = F1(x) and P2 = F2(x). With 
@@ -38,8 +41,9 @@
 %    - see RPF_guide('R') for details
 %
 % 6. R already contains AUC analysis over the maximal possible range of P1
-%    values, but subsequent AUC analysis using different ranges for P1 can
-%    be done using RPF_AUC
+%    values (or over the P1 range specified in the input to RPF_get_R), but 
+%    if a different P1 range is desired, subsequent AUC analysis can be done 
+%    using RPF_AUC
 %
 % 7. Flexibly plot the results of F1, F2, and/or R using RPF_plot, with
 %    optional plot customization specified using the plotSettings struct

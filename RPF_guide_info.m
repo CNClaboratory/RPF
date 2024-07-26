@@ -198,7 +198,7 @@
 %     - to optionally append (x_min, P_min) and/or (x_max, P_max) to the
 %       data for use with interpolation (see "Interpolation" section below)
 %     - to define the initial searchGrid for fitting scaled PFs in the
-%       function RPF_default_searchGrid_scaled
+%       function RPF_default_searchGrid
 %     - to set the lower and upper bounds for the omega parameter of scaled
 %       PFs (which sets the PF's asymptotic value)
 %     - to define default plotting settings in the function RPF_plot

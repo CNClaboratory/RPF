@@ -1,11 +1,33 @@
-function S_new = RPF_structArray2fieldMatrix(S)
+function F_or_R_new = RPF_structArray2fieldMatrix(F_or_R)
+% F_or_R_new = RPF_structArray2fieldMatrix(F_or_R)
+%
+% Given an input F struct or R struct, produces a reformatted version of
+% the struct where across-condition data is coded in matrix fields of the 
+% data and fit structs rather than being coded in struct arrays, which may 
+% make working with the data more convenient in some use cases.
+%
+% For instance, in the F.data struct, values of the dependent variable P
+% are normally coded as F.data(i_cond).P where data is a 1 x nCond struct
+% array hold data for each condition, and P is a 1 x nx array holding
+% values of P at each level of x for condition i_cond. 
+%
+% After being reformatted with G = RPF_structArray2fieldMatrix(F), G.data 
+% is no longer a struct array but rather a struct. Its field G.data.P is an
+% (nCond x nx) matrix where row number indicates condition number i_cond
+% and column number indicates level of x. 
+%
+% Similar considerations hold for other fields of the data and fit structs.
+% 
+% See RPF_guide('F') and RPF_guide('R') for more on the F and R structs,
+% and see RPF_guide('data') and RPF_guide('fit') for more on the data and
+% fit structs.
 
 % determine type of input struct
-switch S.info.PF_type
+switch F_or_R.info.PF_type
     case 'R(P1)'
-        S_new = reformatR(S);
+        F_or_R_new = reformatR(F_or_R);
     case 'F(x)'
-        S_new = reformatF(S);
+        F_or_R_new = reformatF(F_or_R);
 end
 
 end
@@ -16,7 +38,7 @@ end
 function F_new = reformatF(F)
 
 F_new.info = F.info;
-try
+
 % reformat data struct array into a single struct with matrix fields
 data_fields = fields(F.data);
 for i_field = 1:length(data_fields)
@@ -36,9 +58,7 @@ for i_field = 1:length(data_fields)
 
     eval(['F_new.data.' data_fields{i_field} ' = f;']);
 end
-catch
-    keyboard
-end
+
 % reformat fit struct array into a single struct with matrix fields
 fit_fields = fields(F.fit);
 for i_field = 1:length(fit_fields)

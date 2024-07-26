@@ -1,7 +1,7 @@
 function P2 = RPF_eval_R(R, P1)
 % P2 = RPF_eval_R(R, P1)
 % 
-% Evaluate the psychometric functions P2 = R(P1) for each condition.
+% Evaluate the relative psychometric functions P2 = R(P1) for each condition.
 %
 % INPUTS
 % ------

@@ -29,7 +29,7 @@ load trialData_example_discrim.mat
 
 %% analysis for P1 = F1(x)
 
-%%%%% MANUAL SETTINGS FOR F1.info AND constrain1 %%%%%%%%%%%%%%%%%%%%%
+%%%%% MANUAL SETTINGS FOR F1.info %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % for details on how to set up the info struct, see RPF_guide('info')
 F1.info.DV                     = 'd''';
@@ -62,7 +62,7 @@ F1 = RPF_get_F(F1.info, trialData);
 
 %% analysis for P2 = F2(x)
 
-%%%%% MANUAL SETTINGS FOR F2.info AND constrain2 %%%%%%%%%%%%%%%%%%%%%
+%%%%% MANUAL SETTINGS FOR F2.info %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 F2.info.DV          = 'p(high rating)';
 F2.info.DV_respCond = 'all'; % possible values are 'rS1', 'rS2', or 'all'

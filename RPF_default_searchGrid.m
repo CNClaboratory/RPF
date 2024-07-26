@@ -1,19 +1,52 @@
 function searchGrid = RPF_default_searchGrid(info)
 % searchGrid = RPF_default_searchGrid(info)
+%
+% - sets default settings of searchGrid for undefined fields
+% - ensures that any manually defined searchGrid fields are consistent with 
+%   the constrain struct
 
 
-%% 
+%% prepare
 
+% unpack structs
 constrain = info.constrain;
+
+if isfield(info, 'searchGrid')
+    searchGrid = info.searchGrid;
+else
+    searchGrid = [];
+end
+
+% determine whether to use scaled or unscaled PF defaults
+switch info.fit_type
+    case 'interp'
+        searchGrid = [];
+        return
+
+    case 'SSE'
+        scaled_PF = 1;
+
+    otherwise
+
+        switch info.DV
+            case {'p(correct)', 'p(response)', 'p(high rating)', 'mean rating'}
+                scaled_PF = 0;
+
+            case {'d''', 'meta-d''', 'type 2 AUC', 'RT'}
+                scaled_PF = 1;
+        end
+end
 
 %% alpha
 
+% if alpha constraint is defined, set searchGrid.alpha to that constraint
 if isstruct(constrain) && isfield(constrain, 'value') && isfield(constrain.value, 'alpha') && ~isempty(constrain.value.alpha)
-    % set alpha to a fixed value
     searchGrid.alpha = constrain.value.alpha;
 
-else
-    % leave alpha as a free parameter
+% if alpha constraint is not defined, 
+% and if searchGrid.alpha has not been manually defined by the user,
+% then set searchGrid.alpha to its default value
+elseif ~isstruct(searchGrid) || (~isfield(searchGrid, 'alpha') || isempty(searchGrid.alpha)) 
     searchGrid.alpha = .05:.05:3;
     
     % transform alpha according to the appropriate x transform
@@ -22,33 +55,66 @@ end
 
 %% beta
 
+% if beta constraint is defined, set searchGrid.beta to that constraint
 if isstruct(constrain) && isfield(constrain, 'value') && isfield(constrain.value, 'beta') && ~isempty(constrain.value.beta)
-    % set beta to a fixed value
     searchGrid.beta = constrain.value.beta;
 
-else
-    % leave beta as a free parameter
-    searchGrid.beta  = 10.^(-1:.1:1);
+% if beta constraint is not defined, 
+% and if searchGrid.beta has not been manually defined by the user,
+% then set searchGrid.beta to its default value
+elseif ~isfield(searchGrid, 'beta') || isempty(searchGrid.beta)
+    searchGrid.beta = 10.^(-1:.1:1);
 end
 
 %% gamma
 
+% if gamma constraint is defined, set searchGrid.gamma to that constraint
 if isstruct(constrain) && isfield(constrain, 'value') && isfield(constrain.value, 'gamma') && ~isempty(constrain.value.gamma)
-    % set gamma to a fixed value
     searchGrid.gamma = constrain.value.gamma;
 
-else
-    % leave gamma as free parameter
-    searchGrid.gamma  = 0:.1:1;
+% if gamma constraint is not defined, 
+% and if searchGrid.gamma has not been manually defined by the user,
+% then set searchGrid.gamma to its default value
+elseif ~isfield(searchGrid, 'gamma') || isempty(searchGrid.gamma)
+    
+    if scaled_PF
+        searchGrid.gamma = linspace(info.P_min, info.P_max, 11);
+    else
+        searchGrid.gamma  = 0:.1:1;
+    end
+    
 end
 
-%% lambda
+%% lambda (for unscaled PFs)
 
-if isstruct(constrain) && isfield(constrain, 'value') && isfield(constrain.value, 'lambda') && ~isempty(constrain.value.lambda)
-    % set lambda to a fixed value
-    searchGrid.lambda = constrain.value.lambda;
+if scaled_PF == 0
+    
+    % if lambda constraint is defined, set searchGrid.lambda to that constraint
+    if isstruct(constrain) && isfield(constrain, 'value') && isfield(constrain.value, 'lambda') && ~isempty(constrain.value.lambda)
+        searchGrid.lambda = constrain.value.lambda;
 
-else
-    % leave gamma as free parameter
-    searchGrid.lambda = 0:.1:1;
+    % if lambda constraint is not defined, 
+    % and if searchGrid.lambda has not been manually defined by the user,
+    % then set searchGrid.lambda to its default value
+    elseif ~isfield(searchGrid, 'lambda') || isempty(searchGrid.lambda)
+        searchGrid.lambda = 0:.1:1;
+    end
+    
+end
+
+%% omega (for scaled PFs)
+
+if scaled_PF == 1
+    
+    % if omega constraint is defined, set searchGrid.omega to that constraint
+    if isstruct(constrain) && isfield(constrain, 'value') && isfield(constrain.value, 'omega') && ~isempty(constrain.value.omega)
+        searchGrid.omega = constrain.value.omega;
+
+    % if omega constraint is not defined, 
+    % and if searchGrid.omega has not been manually defined by the user,
+    % then set searchGrid.omega to its default value
+    elseif ~isfield(searchGrid, 'omega') || isempty(searchGrid.omega)
+        searchGrid.omega = linspace(info.P_min, info.P_max, 10);
+    end
+    
 end

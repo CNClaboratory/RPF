@@ -19,7 +19,9 @@
 %     scale of the transformed x-axis as defined by info.xt_fn. e.g. if you
 %     want to constrain alpha to occur at a value of contrast = 0.5 and
 %     your PF uses a log10 transform on x, then you would set
-%     constrain.value.alpha = log10(0.5).
+%     constrain.value.alpha = log10(0.5)
+%   - see RPF_get_PF_list('PFs_log') for a list of PFs in the RPF toolbox
+%     using a log10 transform on the x-axis
 %
 % constrain.value.beta
 %   - if specified and not empty, the beta parameter of the PF fit will be

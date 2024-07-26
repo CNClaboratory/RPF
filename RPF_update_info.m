@@ -483,22 +483,4 @@ info.paramsFree = RPF_get_paramsFree(info.constrain);
 
 %% searchGrid
 
-if ~isfield(info, 'searchGrid') || isempty(info.searchGrid)
-    switch info.fit_type
-        case 'interp'
-            info.searchGrid = [];
-
-        case 'SSE'
-            info.searchGrid = RPF_default_searchGrid_scaled(info);
-
-        otherwise
-
-            switch info.DV
-                case {'p(correct)', 'p(response)', 'p(high rating)', 'mean rating'}
-                    info.searchGrid = RPF_default_searchGrid(info);
-
-                case {'d''', 'meta-d''', 'type 2 AUC', 'RT'}
-                    info.searchGrid = RPF_default_searchGrid_scaled(info);
-            end
-    end
-end
+info.searchGrid = RPF_default_searchGrid(info);
