@@ -33,7 +33,7 @@ load trialData_example_discrim.mat
 
 %%%%% F1 settings %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-F1_DV = 2;          % select DV for F1
+F1_DV = 1;          % select DV for F1
                     % 1 = p(correct), 2 = d', 3 = p(response)
 
 F1_fit = 1;         % select fit type for F1
@@ -50,7 +50,7 @@ F1_use_log_PF = 0;  % option for selecting PF based on type of x-axis values
                     
 %%%%% F2 settings %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-F2_DV = 3;          % select DV for F2
+F2_DV = 1;          % select DV for F2
                     % 1 = p(high rating), 2 = mean rating, 3 = meta-d', 4 = type 2 AUC, 5 = RT
 
 F2_DV_respCond = 3; % select DV response condition for F2
@@ -86,7 +86,7 @@ F2.info.fit_type = fit_types{F2_fit};
 F1.info.constrain = [];
 
 
-%% F1 - define info and data
+%% F1
 % in this section, further automated setup is conducted based on the manual
 % settings above, but the details of the automated setup can also be
 % changed if desired
@@ -133,17 +133,10 @@ F1.info.x_label     = 'coherence';
 F1.info.cond_labels = {'low density', 'med density', 'high density'};
 
 
-% update info
-F1.info = RPF_update_info(F1.info, trialData);
-
-% get data
-F1.data = RPF_get_F_data(F1.info, trialData);
-
-% fit
-F1.fit = RPF_fit_F(F1.info, F1.data);
+F1 = RPF_get_F(F1.info, trialData);
 
 
-%% F2 - define info and data
+%% F2
 % in this section, further automated setup is conducted based on the manual
 % settings above, but the details of the automated setup can also be
 % changed if desired
@@ -220,15 +213,8 @@ end
 F2.info.x_label     = 'coherence';
 F2.info.cond_labels = {'low density', 'med density', 'high density'};
 
-% update info
-F2.info = RPF_update_info(F2.info, trialData);
 
-% get data
-F2.data = RPF_get_F_data(F2.info, trialData);
-
-% fit
-F2.fit = RPF_fit_F(F2.info, F2.data);
-
+F2 = RPF_get_F(F2.info, trialData);
 
 
 %% RPF analysis and plots
