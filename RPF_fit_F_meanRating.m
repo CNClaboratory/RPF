@@ -1,5 +1,5 @@
-function fit = RPF_fit_Fx_meanRating(info, data, constrain, searchGrid)
-% fit = RPF_fit_Fx_meanRating(info, data, constrain, searchGrid)
+function fit = RPF_fit_F_meanRating(info, data, constrain, searchGrid)
+% fit = RPF_fit_F_meanRating(info, data, constrain, searchGrid)
 
 %% set default values
 

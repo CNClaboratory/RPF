@@ -4,9 +4,9 @@
 % 
 % trialData is a struct whose fields contain trial-by-trial data from an
 % experiment. It is used to help define default values of the info struct
-% in RPF_update_Fx_info, and to compute the summary data in RPF_get_Fx_data. 
+% in RPF_update_info, and to compute the summary data in RPF_get_F_data. 
 % This summary data is what is used for fitting the psychometric function
-% in RPF_fit_Fx_data.
+% in RPF_fit_F_data.
 %
 % trialData can contain the fields listed below, all of which are 1 x nTrials 
 % vectors holding trial-by-trial data. Of these fields, only x and stimID 

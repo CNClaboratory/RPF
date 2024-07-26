@@ -60,7 +60,7 @@ PFs_log       = {'PAL_Logistic', 'PAL_Gumbel', 'PAL_logQuick', 'PAL_CumulativeNo
 PFs_inverse   = {'PAL_Weibull', 'PAL_Gumbel', 'PAL_Quick', 'PAL_logQuick', 'PAL_Logistic', ...
                  'PAL_CumulativeNormal', 'PAL_HyperbolicSecant'};
              
-PFs_special   = {'RPF_meanRating_PF', 'RPF_interp_Fx'};
+PFs_special   = {'RPF_meanRating_PF', 'RPF_interp_PF'};
 
 PFs_all       = unique( [PFs_log, PFs_scaled, PFs_omega, PFs_lambda, PFs_Palamedes, PFs_inverse, PFs_special] );
 

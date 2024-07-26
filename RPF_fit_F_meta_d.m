@@ -1,5 +1,5 @@
-function fit = RPF_fit_Fx_meta_d(info, data, constrain, searchGrid_scaled)
-% fit = RPF_fit_Fx_meta_d(info, data, constrain, searchGrid_scaled)
+function fit = RPF_fit_F_meta_d(info, data, constrain, searchGrid_scaled)
+% fit = RPF_fit_F_meta_d(info, data, constrain, searchGrid_scaled)
 
 %% set default values
 

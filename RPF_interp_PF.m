@@ -1,4 +1,4 @@
-function Pq = RPF_interp_Fx(params, xtq)
+function Pq = RPF_interp_PF(params, xtq)
 
 if isfield(params, 'interp_method')
     interp_method = params.interp_method;

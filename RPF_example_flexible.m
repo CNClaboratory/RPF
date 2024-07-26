@@ -117,7 +117,7 @@ switch F1.info.DV
 end
 
 if strcmp(F1.info.fit_type, 'interp')
-    F1.info.PF            = @RPF_interp_Fx;
+    F1.info.PF            = @RPF_interp_PF;
     F1.info.append_xP_min = 0;
     F1.info.append_xP_max = 0;
     F1.info.interp_method = 'linear';
@@ -133,10 +133,10 @@ F1.info.cond_labels = {'low density', 'med density', 'high density'};
 
 
 % update info
-F1.info = RPF_update_Fx_info(F1.info, trialData);
+F1.info = RPF_update_info(F1.info, trialData);
 
 % get data
-F1.data = RPF_get_Fx_data(F1.info, trialData);
+F1.data = RPF_get_F_data(F1.info, trialData);
 
 if isfield(F1.data(1), 'padInfo') && isfield(F1.data(1).padInfo, 'd_pad_max')
     F1.info.P_max          = max( [F1.data.d_pad_max] );
@@ -144,7 +144,7 @@ if isfield(F1.data(1), 'padInfo') && isfield(F1.data(1).padInfo, 'd_pad_max')
 end
 
 % fit
-F1.fit = RPF_fit_Fx(F1.info, F1.data, constrain1);
+F1.fit = RPF_fit_F(F1.info, F1.data, constrain1);
 
 
 %% F2 - define info and data
@@ -198,7 +198,7 @@ switch F2.info.DV
 end
 
 if strcmp(F2.info.fit_type, 'interp')
-    F2.info.PF            = @RPF_interp_Fx;
+    F2.info.PF            = @RPF_interp_PF;
     F2.info.append_xP_min = 0;
     F2.info.append_xP_max = 0;
 end
@@ -212,10 +212,10 @@ F2.info.x_label     = 'coherence';
 F2.info.cond_labels = {'low density', 'med density', 'high density'};
 
 % update info
-F2.info = RPF_update_Fx_info(F2.info, trialData);
+F2.info = RPF_update_info(F2.info, trialData);
 
 % get data
-F2.data = RPF_get_Fx_data(F2.info, trialData);
+F2.data = RPF_get_F_data(F2.info, trialData);
 
 
 if strcmp(F2.info.DV, 'meta-d''')
@@ -233,7 +233,7 @@ elseif strcmp(F2.info.DV, 'type 2 AUC')
 end
 
 % fit
-F2.fit = RPF_fit_Fx(F2.info, F2.data, constrain2);
+F2.fit = RPF_fit_F(F2.info, F2.data, constrain2);
 
 
 

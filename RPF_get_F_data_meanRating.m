@@ -1,5 +1,5 @@
-function data = RPF_get_Fx_data_meanRating(info, trialData, i_cond)
-% data = RPF_get_Fx_data_meanRating(info, trialData, i_cond)
+function data = RPF_get_F_data_meanRating(info, trialData, i_cond)
+% data = RPF_get_F_data_meanRating(info, trialData, i_cond)
 
 %% filter by condition
 

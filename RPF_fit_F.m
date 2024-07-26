@@ -1,5 +1,5 @@
-function fit = RPF_fit_Fx(info, data, constrain, searchGrid)
-% fit = RPF_fit_Fx(info, data, constrain, searchGrid)
+function fit = RPF_fit_F(info, data, constrain, searchGrid)
+% fit = RPF_fit_F(info, data, constrain, searchGrid)
 %
 % fit data according to the specifications held in info, subject to
 % constraints.
@@ -9,8 +9,8 @@ function fit = RPF_fit_Fx(info, data, constrain, searchGrid)
 % info - see "help RPF_info" for information on the contents of the info
 %        struct. if following the normal workflow of the RPF toolbox, the
 %        info struct used as input here will be the info struct output from 
-%        RPF_get_Fx_data 
-% data - the data struct output from RPF_get_Fx_data
+%        RPF_get_F_data 
+% data - the data struct output from RPF_get_F_data
 %
 % further optional inputs are
 %
@@ -90,27 +90,27 @@ end
 
 switch info.fit_type
     case 'interp'
-        fit = RPF_fit_Fx_interp(info, data);
+        fit = RPF_fit_F_interp(info, data);
 
     case 'SSE'
-        fit = RPF_fit_Fx_scaled(info, data, constrain, searchGrid);        
+        fit = RPF_fit_F_scaled(info, data, constrain, searchGrid);        
   
     otherwise
         switch info.DV
             case {'p(correct)', 'p(response)', 'p(high rating)'}
-                fit = RPF_fit_Fx_prob(info, data, constrain, searchGrid);
+                fit = RPF_fit_F_prob(info, data, constrain, searchGrid);
 
             case 'd'''
-                fit = RPF_fit_Fx_d(info, data, constrain, searchGrid);
+                fit = RPF_fit_F_d(info, data, constrain, searchGrid);
 
             case 'meta-d'''
-                fit = RPF_fit_Fx_meta_d(info, data, constrain, searchGrid);        
+                fit = RPF_fit_F_meta_d(info, data, constrain, searchGrid);        
 
             case 'mean rating'
-                fit = RPF_fit_Fx_meanRating(info, data, constrain, searchGrid);
+                fit = RPF_fit_F_meanRating(info, data, constrain, searchGrid);
 
             case {'type 2 AUC', 'RT'}
-                fit = RPF_fit_Fx_scaled(info, data, constrain, searchGrid);        
+                fit = RPF_fit_F_scaled(info, data, constrain, searchGrid);        
 
         end
 end

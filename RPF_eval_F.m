@@ -1,5 +1,5 @@
-function [P, xt] = RPF_eval_Fx(F, x, is_xt)
-% [P, xt] = RPF_eval_Fx(F, x, is_xt)
+function [P, xt] = RPF_eval_F(F, x, is_xt)
+% [P, xt] = RPF_eval_F(F, x, is_xt)
 % 
 % Evaluate the psychometric functions P = F(xt) for each condition.
 %

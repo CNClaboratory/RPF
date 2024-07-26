@@ -1,5 +1,5 @@
-function fit = RPF_fit_Fx_interp(info, data)
-% fit = RPF_fit_Fx_interp(info, data)
+function fit = RPF_fit_F_interp(info, data)
+% fit = RPF_fit_F_interp(info, data)
 
 %% 
 

@@ -18,11 +18,11 @@
 % F.data(i_cond)
 %   - a struct array containing analysis of the data in the trialData
 %     struct (see RPF_guide('trialData')) as specified by the info struct
-%   - produced by the function RPF_get_Fx_data
+%   - produced by the function RPF_get_F_data
 %   - see RPF_guide('data') for more information
 %
 % F.fit(i_cond)
 %   - a struct array containing information on the fits to the data in
 %     F.data(i_cond) as specified in the info struct
-%   - produced by the function RPF_fit_Fx
+%   - produced by the function RPF_fit_F
 %   - see RPF_guide('fit') for more information

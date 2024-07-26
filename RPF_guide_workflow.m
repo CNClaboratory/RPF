@@ -27,15 +27,15 @@
 %    - see RPF_guide('info') for details
 %
 % 3. Set any unspecified settings of info to their default values using 
-%    RPF_update_Fx_info
+%    RPF_update_info
 %    - see RPF_guide('info') for details
 %
 % 4. Analyze the data in trialData according to the specifications in info
-%    to retrieve the data struct to be fitted using RPF_get_Fx_data
+%    to retrieve the data struct to be fitted using RPF_get_F_data
 %    - see RPF_guide('data') for details
 %
 % 5. Fit psychometric functions to the data according to the specifications 
-%    in info to retrieve the fit struct using RPF_fit_Fx
+%    in info to retrieve the fit struct using RPF_fit_F
 %    - see RPF_guide('fit') for details
 %
 %    You now have a struct for F1 containing comprehensive information
@@ -62,7 +62,7 @@
 % If you do not have access to trial-by-trial data or the available options
 % for working with trialData are not sufficient for your use case, you may
 % manually define the values of the data struct rather than generating
-% these with RPF_get_Fx_data. If using this option, be sure to consult
+% these with RPF_get_F_data. If using this option, be sure to consult
 % RPF_guide('info') and RPF_guide('data') for a listing of the fields of the 
 % info and data structs that you may need to manually define such that
 % these variables are formatted the way the toolbox expects them to be.

@@ -22,7 +22,7 @@ function [h, plotSettings] = RPF_plot(F_or_R, plotSettings, PF_type)
 %       - 'F2'  -> make a plot of P2 = F2(x) using R.F2
 %       - 'R'   -> make a plot of P2 = R(P1)
 %       - 'all' -> make a plot with 3 subplots for F1(x), F2(x), and R(P1)
-%    - different plot types are created using the subfunctions RPF_plot_Fx
+%    - different plot types are created using the subfunctions RPF_plot_F
 %      and RPF_plot_R
 %    - default value of PF_type = 'all'
 %
@@ -49,10 +49,10 @@ end
 if isR
     switch PF_type
         case 'F1'
-            [h, plotSettings] = RPF_plot_Fx(R.F1, plotSettings);
+            [h, plotSettings] = RPF_plot_F(R.F1, plotSettings);
             
         case 'F2'
-            [h, plotSettings] = RPF_plot_Fx(R.F2, plotSettings);
+            [h, plotSettings] = RPF_plot_F(R.F2, plotSettings);
             
         case 'R'
             [h, plotSettings] = RPF_plot_R(R, plotSettings);
@@ -61,11 +61,11 @@ if isR
             
             h  = figure;
             hs = subplot(1,3,1);
-            RPF_plot_Fx(R.F1, plotSettings, hs);
+            RPF_plot_F(R.F1, plotSettings, hs);
             
             subplot(1,3,2);
             hs = subplot(1,3,2);
-            RPF_plot_Fx(R.F2, plotSettings, hs);
+            RPF_plot_F(R.F2, plotSettings, hs);
             
             subplot(1,3,3);
             hs = subplot(1,3,3);
@@ -77,6 +77,6 @@ if isR
     end
     
 else
-    [h, plotSettings] = RPF_plot_Fx(F, plotSettings);
+    [h, plotSettings] = RPF_plot_F(F, plotSettings);
     
 end

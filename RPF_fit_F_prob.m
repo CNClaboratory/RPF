@@ -1,5 +1,5 @@
-function fit = RPF_fit_Fx_prob(info, data, constrain, searchGrid)
-% fit = RPF_fit_Fx_prob(info, data, constrain, searchGrid)
+function fit = RPF_fit_F_prob(info, data, constrain, searchGrid)
+% fit = RPF_fit_F_prob(info, data, constrain, searchGrid)
 
 %% set default values
 

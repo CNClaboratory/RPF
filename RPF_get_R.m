@@ -7,7 +7,7 @@ function R = RPF_get_R(F1, F2, P1_LB, P1_UB)
 % ------
 % F1    - A struct holding details for the psychometric function P1 = F1(x).
 %         It has three fields: info, data, and fit, as returned by the 
-%         functions RPF_update_Fx_info, RPF_get_Fx_data, and RPF_fit_Fx 
+%         functions RPF_update_info, RPF_get_F_data, and RPF_fit_F 
 %         respectively.
 % F2    - Same as F1, but for the function P2 = F2(x)
 % P1_LB - Optional input specifying the lower bound of P1 for computing RPF
@@ -33,7 +33,7 @@ function R = RPF_get_R(F1, F2, P1_LB, P1_UB)
 
 %% check inputs
 
-if strcmp('RPF_interp_Fx', func2str(F1.fit(1).PF)) && ~strcmp('RPF_interp_Fx', func2str(F2.fit(1).PF))
+if strcmp('RPF_interp_PF', func2str(F1.fit(1).PF)) && ~strcmp('RPF_interp_PF', func2str(F2.fit(1).PF))
     error('RPF:invalidOption', ['\nThe following settings in the F1 and F2 structs are incompatible:\n' ...
                                 '- F1.fit(1).PF is set to ''' func2str(F1.fit(1).PF) '''\n' ... 
                                 '- F2.fit(1).PF is set to ''' func2str(F2.fit(1).PF) '''\n' ... 
@@ -56,7 +56,7 @@ R.info.PF_type = 'R(P1)';
 if all( strcmp('PAL_Weibull', {func2str(F1.info.PF), func2str(F2.info.PF)}) )
     R.info.PF = @RPF_Weibull_RPF;
 
-elseif all( strcmp('RPF_interp_Fx', {func2str(F1.info.PF), func2str(F2.info.PF)}) )
+elseif all( strcmp('RPF_interp_PF', {func2str(F1.info.PF), func2str(F2.info.PF)}) )
     R.info.PF = @RPF_interp_RPF;
 
 else

@@ -1,4 +1,4 @@
-function P = RPF_meanRating_PF(params, xt)
+function P = RPF_PF_meanRating(params, xt)
 
 % get p(high rating) PF for each level of rating threshold
 for i = 1:size(params.value, 1)    

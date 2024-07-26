@@ -1,5 +1,5 @@
-function [h, plotSettings] = RPF_plot_Fx(F, plotSettings, h)
-% [h, plotSettings] = RPF_plot_Fx(F, plotSettings, h)
+function [h, plotSettings] = RPF_plot_F(F, plotSettings, h)
+% [h, plotSettings] = RPF_plot_F(F, plotSettings, h)
 %
 % Create a plot of the psychometric function P = F(x).
 %
@@ -50,7 +50,7 @@ x     = plotSettings.F{i}.x_min: .01: plotSettings.F{i}.x_max;
 nCond = length(F.info.cond_vals);
 
 % evaluate P = F(xt)
-[P, xt] = RPF_eval_Fx(F, x);
+[P, xt] = RPF_eval_F(F, x);
 
 % plot fit
 for i_cond = 1:nCond

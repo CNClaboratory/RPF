@@ -1,5 +1,5 @@
-function [x, xt, invMethod] = RPF_eval_Fx_inv(F, P, invMethod)
-% [x, xt, invMethod] = RPF_eval_Fx_inv(F, P, invMethod)
+function [x, xt, invMethod] = RPF_eval_F_inv(F, P, invMethod)
+% [x, xt, invMethod] = RPF_eval_F_inv(F, P, invMethod)
 % 
 % Evaluate the inverse psychometric functions xt = F^-1(P) for each condition.
 %
@@ -22,8 +22,8 @@ function [x, xt, invMethod] = RPF_eval_Fx_inv(F, P, invMethod)
 
 %% check inputs
 
-P_at_x_min = RPF_eval_Fx(F, F.info.x_min);
-P_at_x_max = RPF_eval_Fx(F, F.info.x_max);
+P_at_x_min = RPF_eval_F(F, F.info.x_min);
+P_at_x_max = RPF_eval_F(F, F.info.x_max);
 
 if any(min(P) < P_at_x_min) || any(max(P) > P_at_x_max)
     warnText = ['In the input F struct, \n' ...

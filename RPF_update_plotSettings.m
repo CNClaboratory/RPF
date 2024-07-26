@@ -471,7 +471,7 @@ if isF
     % param title is N/A for special PFs
     PFs_special = RPF_get_PF_list('PFs_special');    
     
-    if strcmp(func2str(F.info.PF), 'RPF_interp_Fx')
+    if strcmp(func2str(F.info.PF), 'RPF_interp_PF')
         str_title_param = '(interpolated)';
         
     elseif strcmp(func2str(F.info.PF), 'RPF_meanRating_PF')

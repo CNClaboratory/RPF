@@ -1,5 +1,5 @@
 function P2 = RPF_eval_R(R, P1)
-% P2 = RPF_eval_Fx(R, P1)
+% P2 = RPF_eval_R(R, P1)
 % 
 % Evaluate the psychometric functions P2 = R(P1) for each condition.
 %
@@ -19,6 +19,6 @@ if isfield(R.info, 'PF') && isa(R.info.PF, 'function_handle')
 
 % else, compute xt1 = F^-1(P1) and then P2 = F2(xt1)
 else
-    x1 = RPF_eval_Fx_inv(R.F1, P1);
-    P2 = RPF_eval_Fx(R.F2, x1);
+    x1 = RPF_eval_F_inv(R.F1, P1);
+    P2 = RPF_eval_F(R.F2, x1);
 end

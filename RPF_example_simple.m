@@ -40,20 +40,20 @@ F1.info.x_max       = 1;
 F1.info.x_label     = 'coherence';
 F1.info.cond_labels = {'low density', 'med density', 'high density'};
 
-% for info on the constrain struct, see "help RPF_fit_Fx"
+% for info on the constrain struct, see RPF_guide('constrain')
 constrain1.value.gamma = 0;
 constrain1.value.omega = 'P_max';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % update info
-F1.info = RPF_update_Fx_info(F1.info, trialData);
+F1.info = RPF_update_info(F1.info, trialData);
 
 % get data
-F1.data = RPF_get_Fx_data(F1.info, trialData);
+F1.data = RPF_get_F_data(F1.info, trialData);
 
 % fit data
-F1.fit = RPF_fit_Fx(F1.info, F1.data, constrain1);
+F1.fit = RPF_fit_F(F1.info, F1.data, constrain1);
 
 
 %% analysis for P2 = F2(x)
@@ -73,13 +73,13 @@ constrain2          = [];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % update info
-F2.info = RPF_update_Fx_info(F2.info, trialData);
+F2.info = RPF_update_info(F2.info, trialData);
 
 % get data
-F2.data = RPF_get_Fx_data(F2.info, trialData);
+F2.data = RPF_get_F_data(F2.info, trialData);
 
 % fit data
-F2.fit = RPF_fit_Fx(F2.info, F2.data, constrain2);
+F2.fit = RPF_fit_F(F2.info, F2.data, constrain2);
 
 
 %% RPF analysis and plots

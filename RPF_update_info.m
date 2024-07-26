@@ -1,5 +1,5 @@
-function info = RPF_update_Fx_info(info, trialData)
-% info = RPF_update_Fx_info(info, trialData)
+function info = RPF_update_info(info, trialData)
+% info = RPF_update_info(info, trialData)
 % 
 % Update the info struct with default values for unspecified fields. 
 % 
@@ -32,7 +32,7 @@ end
 % set default fit type
 if ~isfield(info, 'fit_type') || isempty(info.fit_type)
     
-    if isfield(info, 'PF') && strcmp(func2str(info.PF), 'RPF_interp_Fx')
+    if isfield(info, 'PF') && strcmp(func2str(info.PF), 'RPF_interp_PF')
         info.fit_type = 'interp';
     elseif any(strcmp(info.DV, {'type 2 AUC', 'RT'}))
         info.fit_type = 'SSE';
@@ -43,13 +43,13 @@ if ~isfield(info, 'fit_type') || isempty(info.fit_type)
 end
 
 % check that fit_type is compatible with PF for interpolation
-if (strcmp(info.fit_type, 'interp') && ~strcmp(func2str(info.PF), 'RPF_interp_Fx')) || ...
-   (~strcmp(info.fit_type, 'interp') && strcmp(func2str(info.PF), 'RPF_interp_Fx'))
+if (strcmp(info.fit_type, 'interp') && ~strcmp(func2str(info.PF), 'RPF_interp_PF')) || ...
+   (~strcmp(info.fit_type, 'interp') && strcmp(func2str(info.PF), 'RPF_interp_PF'))
 
     error('RPF:invalidOption', ['\nThe following settings in the info struct are incompatible:\n' ...
                                 '- info.fit_type is set to ''' info.fit_type '''\n' ... 
                                 '- info.PF is set to @' func2str(info.PF) '\n\n' ...
-                                'The ''interp'' fit type can only be used with the @RPF_interp_Fx PF, and vice versa.\n\n' ...
+                                'The ''interp'' fit type can only be used with PF = @RPF_interp_PF, and vice versa.\n\n' ...
                                 'See "help RPF_info" for how to configure the info struct.'])
 end
 
@@ -95,7 +95,7 @@ end
 if ~isfield(info, 'PF') || isempty(info.PF)
     
     if strcmp(info.fit_type, 'interp')
-        info.PF = @RPF_interp_Fx;
+        info.PF = @RPF_interp_PF;
         
     else
         switch info.DV
@@ -133,7 +133,12 @@ end
 
 %% x vals, min, max
 
-[x_vals_all, x_vals_with_defined_stimID] = RPF_get_x_info(trialData);
+f_x          = ~isnan(trialData.x) & ~isinf(trialData.x);
+f_stimID_all = trialData.stimID == 0 | trialData.stimID == 1 | trialData.stimID == 0.5;
+f_stimID_def = trialData.stimID == 0 | trialData.stimID == 1;
+
+x_vals_all                 = unique(trialData.x(f_x & f_stimID_all));
+x_vals_with_defined_stimID = unique(trialData.x(f_x & f_stimID_def));
 
 % since info.x_vals is a list of x values where info.DV is defined
 % (corresponding to the list of performance values in data.P), it must not
@@ -168,7 +173,7 @@ end
 %% x info for interpolation
 
 % if interpolating, enforce consistent x_min and x_max values
-if strcmp(func2str(info.PF), 'RPF_interp_Fx')
+if strcmp(func2str(info.PF), 'RPF_interp_PF')
     
     % default append_xP_min
     if ~isfield(info, 'append_xP_min') || isempty(info.append_xP_min)

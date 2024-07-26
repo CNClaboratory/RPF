@@ -7,7 +7,7 @@
 % 
 % info is a struct whose fields contain information and settings that are 
 % used to determine how data analysis and psychometric function fitting
-% should proceed in the functions RPF_get_Fx_data and RPF_fit_Fx_data. Some 
+% should proceed in the functions RPF_get_F_data and RPF_fit_F_data. Some 
 % information in info is also used to help guide subsequent RPF analysis. 
 %
 % info can contain the fields listed below. Many of these fields are
@@ -21,7 +21,7 @@
 % value that must be defined manually is info.DV.
 %
 % After manually defining your fields of interest, use the function 
-% RPF_update_Fx_info to set the rest of the fields to their defaults. This
+% RPF_update_info to set the rest of the fields to their defaults. This
 % function also requires you to pass in trialData as an input (see
 % RPF_guide('trialData')).
 %
@@ -70,11 +70,11 @@
 %    @RPF_scaled_Weibull, @RPF_scaled_Gumbel, @RPF_scaled_Quick, 
 %    @RPF_scaled_logQuick
 %  - special case for fitting mean rating: @RPF_meanRating_PF
-%  - special case for interpolation: @RPF_interp_Fx
+%  - special case for interpolation: @RPF_interp_PF
 %  - use RPF_get_PF_list to get listings of PFs available in the RPF toolbox 
 %    organized by various characteristics
 %  * DEFAULT is set to
-%      - @RPF_interp_Fx if info.fit_type is 'interp'
+%      - @RPF_interp_PF if info.fit_type is 'interp'
 %      - @PAL_Weibull if info.DV is a probability
 %      - @RPF_meanRating_PF if info.DV is 'mean rating' and info.fit_type
 %        is 'MLE' (see "Fitting mean rating" below)
@@ -88,7 +88,7 @@
 %    via SSE, use one of the scaled PFs as returned by 
 %    RPF_get_PF_list('PFs_scaled')
 %  - if fitting mean rating via MLE, use @RPF_meanRating_PF
-%  - if interpolating, use @RPF_interp_Fx
+%  - if interpolating, use @RPF_interp_PF
 %
 % info.fit_type
 %   - describes the type of fitting to be conducted, i.e. maximizing
@@ -101,7 +101,7 @@
 %   - 'interp' ~ interpolation
 %   - 'SSE'    ~ minimize sum of squared errors
 %   * DEFAULT value depends on info.PF:
-%     - info.PF is 'RPF_interp_Fx'      --> default is 'interp'
+%     - info.PF is 'RPF_interp_PF'      --> default is 'interp'
 %     - info.PF is 'type 2 AUC' or 'RT' --> default is 'SSE'
 %     - all other values of info.PF     --> default is 'MLE'
 %
@@ -255,7 +255,7 @@
 % Interpolation
 % -------------
 % info.PF
-%   - must be set to @RPF_interp_Fx
+%   - must be set to @RPF_interp_PF
 %
 % info.interp_method
 %   - interpolation method, as used by the Matlab function @interp1
