@@ -243,6 +243,13 @@ if ~isfield(info, 'xt_max') || isempty(info.xt_max)
 end
 
 
+%% x label
+
+if ~isfield(info, 'x_label') || isempty(info.x_label)
+    info.x_label = 'x';
+end
+
+
 %% cond vals
 
 % cond_vals
@@ -258,6 +265,15 @@ end
 % nCond
 if ~isfield(info, 'nCond') || isempty(info.nCond)
     info.nCond = length(info.cond_vals);
+end
+
+
+%% cond labels
+
+if ~isfield(info, 'cond_labels') || isempty(info.cond_labels)
+    for i_cond = 1:length(info.cond_vals)
+        info.cond_labels{i_cond} = ['cond = ' num2str(info.cond_vals(i_cond))];
+    end
 end
 
 
@@ -429,13 +445,6 @@ if ~isfield(info, 'P_max') || isempty(info.P_max)
 end
 
 
-%% x label
-
-if ~isfield(info, 'x_label') || isempty(info.x_label)
-    info.x_label = 'x';
-end
-
-
 %% P label
 
 if ~isfield(info, 'P_label') || isempty(info.P_label)
@@ -451,15 +460,6 @@ if ~isfield(info, 'P_label') || isempty(info.P_label)
             
     info.P_label = [info.DV str_respCond];
         
-end
-
-
-%% cond labels
-
-if ~isfield(info, 'cond_labels') || isempty(info.cond_labels)
-    for i_cond = 1:length(info.cond_vals)
-        info.cond_labels{i_cond} = ['cond = ' num2str(info.cond_vals(i_cond))];
-    end
 end
 
 
