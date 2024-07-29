@@ -7,19 +7,17 @@ function [counts, padInfo] = RPF_trials2counts_SDT(trialData, info)
 % INPUTS
 % ------
 % info - a struct holding settings for data analysis. see RPF_guide('info') 
-%    for more information.
 % 
 % trialData - a struct holding trial-by-trial data from an experiment. see
-%    RPF_guide('trialData') for more information.
+%    RPF_guide('trialData')
 %
 % OUTPUTS
 % -------
 % counts - a struct holding counts for SDT analysis. see RPF_guide('counts') 
-%    for more information.
 %
 % padInfo - a struct holding information on the cell padding settings used
-%    in the calculation of counts. see RPF_guide('padInfo') for more
-%    information.
+%    in the calculation of counts. see RPF_guide('padInfo')
+
 
 %% sort inputs
 

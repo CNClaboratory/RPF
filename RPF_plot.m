@@ -5,7 +5,8 @@ function [h, plotSettings] = RPF_plot(F_or_R, plotSettings, PF_type)
 %
 % INPUTS
 % ------
-% * F_or_R  - can be either an F struct or an R struct. 
+% * F_or_R - can be either an F struct or an R struct. see RPF_guide('F') 
+%       and RPF_guide('R')
 % * plotSettings - a struct controlling the appearance of the plot. 
 %     - see RPF_guide('plotSettings') for a full description of settings
 %       and default values

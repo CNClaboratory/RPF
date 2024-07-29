@@ -5,13 +5,13 @@ function fit = RPF_fit_F(info, data)
 %
 % INPUTS
 % ------
-% info - the info struct. see RPF_guide('info') for more
-% data - the data struct array. see RPF_guide('data') for more
+% info - the info struct. see RPF_guide('info')
+% data - the data struct array. see RPF_guide('data')
 %
 % OUTPUTS
 % -------
 % fit - a 1 x nCond struct array holding details of the function fits for 
-%       each condition. see RPF_guide('fit') for more
+%       each condition. see RPF_guide('fit')
 
 
 %% determine type of fitting to use

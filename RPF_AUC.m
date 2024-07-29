@@ -5,18 +5,18 @@ function [AUC, P2_avg] = RPF_AUC(R, P1_LB, P1_UB, P1_grain)
 %
 % INPUTS
 % ------
-% R        - RPF struct as output from RPF_get_R
+% R        - the R struct. see RPF_guide('R')
 % P1_LB    - lower bound on the P1 axis for computing RPF AUC. must be no
 %            smaller than R.info.P1_LB_min
-%            DEFAULT value is R.info.P1_LB_min
+%          * DEFAULT value is R.info.P1_LB_min
 % P1_UB    - upper bound on the P1 axis for computing RPF AUC. must be no
 %            larger than R.info.P1_UB_max
-%            DEFAULT value is R.info.P1_UB_max
-%
-% P1_grain - RPF AUC is computed by numerical integration over [P1_LB :
-%            P1_grain : P1_UB], so smaller values lead to more precise
-%            estimates.
-%            DEFAULT value is 1e-5.
+%          * DEFAULT value is R.info.P1_UB_max
+% P1_grain - in cases where a function handle for the RPF is not specified, 
+%            the RPF AUC is computed by numerical integration over [P1_LB :
+%            P1_grain : P1_UB], so smaller values of P1_grain lead to more 
+%            precise AUC estimates.
+%          * DEFAULT value is 1e-5.
 %
 % OUTPUTS
 % -------

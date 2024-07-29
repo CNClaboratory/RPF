@@ -5,7 +5,7 @@ function P2 = RPF_eval_R(R, P1)
 %
 % INPUTS
 % ------
-% R  - the R(P1) struct
+% R  - the R struct. see RPF_guide('R')
 % P1 - an array of P1 values at which to evaluate R
 %
 % OUTPUTS

@@ -1,4 +1,5 @@
 function P = RPF_scaled_logQuick(params, x)
+% P = RPF_scaled_logQuick(params, x)
 
 alpha = params(1);
 beta  = params(2);

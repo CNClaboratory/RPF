@@ -1,4 +1,5 @@
 function P = RPF_scaled_Quick(params, x)
+% P = RPF_scaled_Quick(params, x)
 
 alpha = params(1);
 beta  = params(2);

@@ -5,7 +5,7 @@ function [P, xt] = RPF_eval_F(F, x, is_xt)
 %
 % INPUTS
 % ------
-% F     - the F(x) struct
+% F     - the F struct. see RPF_guide('F')
 % x     - an array of x values at which to evaluate F. these are transformed
 %         into xt values by xt_fn prior to the function evaluation, unless 
 %         the optional input is_xt == 1.
@@ -16,7 +16,7 @@ function [P, xt] = RPF_eval_F(F, x, is_xt)
 % is_xt - optional input that, if set to 1, signals that the input variable
 %         x has already been transformed to xt. in this case, xt_fn is not
 %         applied to the input x prior to the function evaluation.
-%         [default = 0]
+%       * DEFAULT is 0
 %
 % OUTPUTS
 % -------

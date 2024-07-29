@@ -5,13 +5,13 @@ function P2 = RPF_Weibull_RPF(R, P1, filter_P1)
 %
 % INPUTS
 % ------
-% R         - the R(P1) struct
+% R         - the R struct. see RPF_guide('R')
 % P1        - an array of P1 values at which to evaluate R
 % filter_P1 - if set to 1, removes any values from P1 that might cause
 %             numerical issues such as imaginary solutions, e.g. due to
 %             being lower than F1(xt_min), being higher than F1(xt_max), or 
 %             being equal to 1 (or nearly so)
-%             [default = 0]
+%           * DEFAULT = 0
 %
 % OUTPUTS
 % -------

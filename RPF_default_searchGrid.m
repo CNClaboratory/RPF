@@ -1,10 +1,19 @@
 function searchGrid = RPF_default_searchGrid(info)
 % searchGrid = RPF_default_searchGrid(info)
 %
-% - sets default settings of searchGrid for undefined fields
-% - ensures that any manually defined searchGrid fields are consistent with 
-%   the constrain struct
-
+% This function sets default settings of searchGrid for undefined fields,
+% and overwrites any pre-specified searchGrid fields that are inconsistent 
+% with the constrain struct
+%
+% INPUTS
+% ------
+% info - the info struct, which is assumed to already contain the searchGrid
+%    struct as a field if any settings in searchGrid are intended to be pre-
+%    specified. see RPF_guide('info') and RPF_guide('searchGrid') for more.
+%
+% OUTPUTS
+% -------
+% searchGrid - an updated searchGrid struct. see RPF_guide('searchGrid')
 
 %% prepare
 

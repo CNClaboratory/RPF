@@ -6,7 +6,7 @@ function list_out = RPF_get_PF_list(list_type)
 % 
 % INPUTS
 % ------
-% "list_type" is a string containing the desired PF list. 
+% list_type - a string containing the desired PF list. 
 % 
 % Valid values for "list_type" are listed below. Note that in the below, 
 % 'PF' refers to psychometric functions applied to F(x) and 'RPF' refers to 
@@ -34,8 +34,8 @@ function list_out = RPF_get_PF_list(list_type)
 %
 % OUTPUTS
 % -------
-% "list_out" is the requested list. This is a cell array of strings holding
-% function names, not actual function handles.
+% list_out- the requested list. This is a cell array of strings holding
+%           function names, not actual function handles.
 
 
 %% PF lists available

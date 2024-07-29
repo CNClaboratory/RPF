@@ -5,7 +5,7 @@ function x = RPF_eval_xt_fn_inv(F, xt)
 %
 % INPUTS
 % ------
-% F  - the F(x) struct
+% F  - the F struct. see RPF_guide('F')
 % xt - an array of xt values at which to evaluate xt_fn_inv
 %
 % OUTPUTS

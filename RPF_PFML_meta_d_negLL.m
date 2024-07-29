@@ -1,4 +1,5 @@
 function negLL = RPF_PFML_meta_d_negLL(params, xt, data, PF)
+% negLL = RPF_PFML_meta_d_negLL(params, xt, data, PF)
 
 %% get params
 

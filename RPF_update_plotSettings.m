@@ -7,7 +7,7 @@ function plotSettings = RPF_update_plotSettings(F_or_R, plotSettings)
 % INPUTS
 % ------
 % F_or_R       - the struct for which the plot will be made. can be either an F
-%                struct or an R struct
+%                struct or an R struct. see RPF_guide('F') and RPF_guide('R')
 % plotSettings - the plotSettings struct for RPF_plot containing prespecified
 %                settings. can also be unspecified or empty, in which case all 
 %                plot settings are set to their default values. see

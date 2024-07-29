@@ -5,30 +5,21 @@ function R = RPF_get_R(F1, F2, P1_LB, P1_UB)
 %
 % INPUTS
 % ------
-% F1    - A struct holding details for the psychometric function P1 = F1(x).
-%         It has three fields: info, data, and fit, as returned by the 
-%         functions RPF_update_info, RPF_get_F_data, and RPF_fit_F 
-%         respectively.
-% F2    - Same as F1, but for the function P2 = F2(x)
-% P1_LB - Optional input specifying the lower bound of P1 for computing RPF
+% F1    - an F struct holding details for the psychometric function P1 = F1(x).
+%         see RPF_guide('F')
+% F2    - same as F1, but for the function P2 = F2(x)
+% P1_LB - optional input specifying the lower bound of P1 for computing RPF
 %         AUC. Default value is the minimum possible, as stored in the
 %         output R.info.P1_LB_min. Note that if P1_LB < R.info.P1_LB_min, 
 %         P1_LB will be automatically set equal to R.info.P1_LB_min.
-% P1_UB - Optional input specifying the upper bound of P1 for computing RPF
+% P1_UB - optional input specifying the upper bound of P1 for computing RPF
 %         AUC. Default value is the maximum possible, as stored in the
 %         output R.info.P1_UB_max. Note that if P1_UB > R.info.P1_UB_max, 
 %         P1_UB will be automatically set equal to R.info.P1_UB_max.
 % 
 % OUTPUTS
 % -------
-% R - A struct with the following fields:
-%   F1   - Copy of the F1 input
-%   F2   - Copy of the F2 input
-%   info - A struct holding general information for use in RPF analysis and
-%          plotting in the functions RPF_AUC and RPF_plot
-%   fit  - A struct holding AUC analysis results over the region [P1_LB, 
-%          P1_UB], as well as a function handle for the RPF function (if 
-%          applicable).
+% R - the R struct. see RPF_guide('R')
 
 
 %% check inputs

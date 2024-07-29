@@ -5,19 +5,23 @@ function [x, xt, invMethod] = RPF_eval_F_inv(F, P, invMethod)
 %
 % INPUTS
 % ------
-% F         - the F(x) struct
-% P         - an array of P values at which to evaluate F^-1
+% F         - the F struct. see RPF_guide('F')
+% P         - an array of P values at which to evaluate F^-1. 
+%             P may be of size [1, nP] or [nCond, nP]. if size [1, nP], then
+%             every condition is evaluated at these values of P. if size [nCond,
+%             nP], then the output x(i_cond, :) is evaluated at P(i_cond, :)
+%             for all conditions i_cond.
 % invMethod - method for computing the inverse. if 'analytical', an analytical
 %             solution will be employed if possible. if 'numerical', a 
 %             numerical approach will be employed.
-%             [default = 'analytical' if available, 'numerical' otherwise]
+%           * DEFAULT = 'analytical' if available, 'numerical' otherwise
 % 
 % OUTPUTS
 % -------
 % x         - a matrix of size [nCond, length(P)] that contains x for each
 %             condition
 % xt        - same as x, but expressed in terms of the x transform
-% invMethod - the method used to solve for x
+% invMethod - the method used to solve for x. may be 'analytical' or 'numerical'
 
 
 %% check inputs

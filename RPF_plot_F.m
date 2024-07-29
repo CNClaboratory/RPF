@@ -5,7 +5,7 @@ function [h, plotSettings] = RPF_plot_F(F, plotSettings, h)
 %
 % INPUTS
 % ------
-% * F - an F struct. see RPF_guide('F') for more information
+% * F - an F struct. see RPF_guide('F')
 % * plotSettings - a struct controlling the appearance of the plot. 
 %     - see RPF_guide('plotSettings') for a full description of settings
 %       and default values
@@ -18,7 +18,7 @@ function [h, plotSettings] = RPF_plot_F(F, plotSettings, h)
 %
 % OUTPUTS
 % -------
-% * h       - a handle to the plot 
+% * h            - a handle to the plot 
 % * plotSettings - the updated plotSettings struct used to make the plot
 
 

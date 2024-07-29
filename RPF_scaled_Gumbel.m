@@ -1,4 +1,5 @@
 function P = RPF_scaled_Gumbel(params, xt)
+% P = RPF_scaled_Gumbel(params, xt)
 
 alpha = params(1);
 beta  = params(2);

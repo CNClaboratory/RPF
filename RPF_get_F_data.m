@@ -3,25 +3,14 @@ function data = RPF_get_F_data(info, trialData)
 % 
 % INPUTS
 % ------
-% info - a struct holding settings for data analysis. see RPF_guide('info') 
-%    for more information.
+% info - a struct holding settings for data analysis. see RPF_guide('info')
 % 
 % trialData - a struct holding trial-by-trial data from an experiment. see
-%    RPF_guide('trialData') for more information.
+%    RPF_guide('trialData')
 %
 % OUTPUTS
 % -------
-% data - a struct array with various fields depending on the analysis specified
-%        in info.DV. elements of the struct array correspond to different
-%        experimental conditions. basic fields common to all analyses are
-%
-%   x  - a sorted list of all unique x values used in the experiment
-%   xt - x after application of the relevant xt_fn function. if there
-%        is no x transform, xt == x
-%   P  - a summary measure of the DV at each level of x
-%
-%   other fields contain further data useful for fitting functions to the
-%   data and other purposes.
+% data - a struct array hold results of the data analysis. see RPF_guide('data')
 
 
 %% get data depending on DV

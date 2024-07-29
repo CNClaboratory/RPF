@@ -5,12 +5,12 @@ function F = RPF_get_F(info, trialData)
 %
 % INPUTS
 % ------
-% info      - the info struct. see RPF_guide('info') for more
-% trialData - the trialData struct. see RPF_guide('trialData') for more
+% info      - the info struct. see RPF_guide('info')
+% trialData - the trialData struct. see RPF_guide('trialData')
 %
 % OUTPUTS
 % -------
-% F - the F struct. see RPF_guide('F') for more
+% F - the F struct. see RPF_guide('F')
 
 F.info = RPF_update_info(info, trialData);
 

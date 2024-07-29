@@ -1,4 +1,5 @@
 function [xt_fn, xt_fn_inv] = RPF_get_PF_xt_fn(PF)
+% [xt_fn, xt_fn_inv] = RPF_get_PF_xt_fn(PF)
 
 logFunctions = RPF_get_PF_list('PFs_log');
 
