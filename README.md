@@ -15,4 +15,5 @@ Please note that the RPF toolbox requires the following toolboxes:
 
 # Please cite this toolbox as related to the following publication
 (as of August 6, 2024; watch this space for updates to the preprint/publication)
+
 Maniscalco, B., Castaneda, O. G., Odegaard, B., Morales, J., Rajananda, S., & Peters, M. A. K. (2020, July 6). The metaperceptual function: Exploring dissociations between confidence and task performance with type 2 psychometric curves. https://doi.org/10.31234/osf.io/5qrjn
