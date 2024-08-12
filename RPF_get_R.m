@@ -80,10 +80,7 @@ R.info.min_P1_at_x_max = min( R.info.P1_at_x_max );
 %% define R.fit
 
 for i_cond = 1:R.info.nCond
-    
-    R.fit(i_cond).P1_at_x_min = R.info.P1_at_x_min(i_cond);
-    R.fit(i_cond).P1_at_x_max = R.info.P1_at_x_max(i_cond);
-    
+        
     R.fit(i_cond).PF = R.info.PF;    
     
     % handle case where RPF is estimated entirely via interpolation
@@ -132,7 +129,7 @@ end
 %% define lower and upper P1 bounds for computing AUC
 
 % find min LB and max UB
-if isa(R.info.PF, 'function_handle') && strcmp('RPF_interp_RPF', func2str(R.fit(i_cond).PF))
+if isa(R.info.PF, 'function_handle') && strcmp('RPF_interp_RPF', func2str(R.info.PF))
     R.info.max_P1_data_min = max( R.info.P1_data_min );
     R.info.min_P1_data_max = min( R.info.P1_data_max );
     
@@ -173,11 +170,17 @@ else
 end
 
 
-%% compute AUC
+%% add AUC analysis to R.fit
 
 [AUC, P2_avg] = RPF_AUC(R);
 
 for i_cond = 1:length(F1.info.cond_vals)
+    R.fit(i_cond).P1_at_x_min = R.info.P1_at_x_min(i_cond);
+    R.fit(i_cond).P1_at_x_max = R.info.P1_at_x_max(i_cond);
+
+    R.fit(i_cond).P1_LB  = R.info.P1_LB;
+    R.fit(i_cond).PU_LB  = R.info.P1_UB;
+    
     R.fit(i_cond).AUC    = AUC(i_cond);
     R.fit(i_cond).P2_avg = P2_avg(i_cond);
 end

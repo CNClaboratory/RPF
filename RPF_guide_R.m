@@ -117,14 +117,6 @@
 %   - analogous to the fit struct of the F struct, but with information
 %     specific to R
 %
-% R.fit(i_cond).P1_at_x_min
-%   - value of P1 = F1(R.info.x_min) at condition i_cond
-%   - identical to R.info.P1_at_x_min(i_cond)
-%
-% R.fit(i_cond).P1_at_x_max
-%   - value of P1 = F1(R.info.x_max) at condition i_cond
-%   - identical to R.info.P1_at_x_max(i_cond)
-%
 % R.fit(i_cond).PF
 %   - a function handle for the psychometric function P2 = R(P1),
 %     determined automatically by RPF_get_R
@@ -141,6 +133,22 @@
 %   - if the RPF is being interpolated, then params will contain fields 
 %     P1_sorted_unique, P2_sorted_unique, and interp_method (see "RPF
 %     Interpolation" section below)
+%
+% R.fit(i_cond).P1_at_x_min
+%   - value of P1 = F1(R.info.x_min) at condition i_cond
+%   - identical to R.info.P1_at_x_min(i_cond)
+%
+% R.fit(i_cond).P1_at_x_max
+%   - value of P1 = F1(R.info.x_max) at condition i_cond
+%   - identical to R.info.P1_at_x_max(i_cond)
+%
+% R.fit(i_cond).P1_LB
+%   - lower bound of the P1 interval used to compute AUC at condition i_cond
+%   - identical to R.info.P1_LB
+%
+% R.fit(i_cond).P1_UB
+%   - upper bound of the P1 interval used to compute AUC at condition i_cond
+%   - identical to R.info.P1_UB
 %
 % RPF.fit(i_cond).AUC
 %   - AUC of the RPF for the current condition over the maximal possible P1 
