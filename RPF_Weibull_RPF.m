@@ -10,8 +10,9 @@ function P2 = RPF_Weibull_RPF(R, P1, filter_P1)
 % filter_P1 - if set to 1, removes any values from P1 that might cause
 %             numerical issues such as imaginary solutions, e.g. due to
 %             being lower than F1(xt_min), being higher than F1(xt_max), or 
-%             being equal to 1 (or nearly so)
-%           * DEFAULT = 0
+%             being equal to 1 (or nearly so-- values within 1e-3 of 1 are 
+%             removed)
+%           * DEFAULT = 1
 %
 % OUTPUTS
 % -------
@@ -27,7 +28,7 @@ if ~exist('P1','var') || isempty(P1)
 end
 
 if ~exist('filter_P1','var') || isempty(filter_P1)
-    filter_P1 = 0;
+    filter_P1 = 1;
 end
 
 if filter_P1
