@@ -179,7 +179,7 @@ for i_cond = 1:length(F1.info.cond_vals)
     R.fit(i_cond).P1_at_x_max = R.info.P1_at_x_max(i_cond);
 
     R.fit(i_cond).P1_LB  = R.info.P1_LB;
-    R.fit(i_cond).PU_LB  = R.info.P1_UB;
+    R.fit(i_cond).P1_UB  = R.info.P1_UB;
     
     R.fit(i_cond).AUC    = AUC(i_cond);
     R.fit(i_cond).P2_avg = P2_avg(i_cond);
