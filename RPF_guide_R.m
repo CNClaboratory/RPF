@@ -143,11 +143,11 @@
 %   - identical to R.info.P1_at_x_max(i_cond)
 %
 % R.fit(i_cond).P1_LB
-%   - lower bound of the P1 interval used to compute AUC at condition i_cond
+%   - lower bound of the P1 interval used to compute AUC
 %   - identical to R.info.P1_LB
 %
 % R.fit(i_cond).P1_UB
-%   - upper bound of the P1 interval used to compute AUC at condition i_cond
+%   - upper bound of the P1 interval used to compute AUC
 %   - identical to R.info.P1_UB
 %
 % RPF.fit(i_cond).AUC
