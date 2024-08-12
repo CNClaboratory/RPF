@@ -20,10 +20,13 @@
 % the rest to take on their default values. The only field with no default 
 % value that must be defined manually is info.DV.
 %
-% After manually defining your fields of interest, use the function 
+% After manually defining your fields of interest, you can use the function 
 % RPF_update_info to set the rest of the fields to their defaults. This
 % function also requires you to pass in trialData as an input (see
-% RPF_guide('trialData')).
+% RPF_guide('trialData')). Note that if you use the normal RPF toolbox
+% workflow and pass info as an input to RPF_get_F (e.g. as illustrated in 
+% RPF_example_simple), then your manually defined info struct is
+% automatically updated with RPF_update_info inside RPF_get_F.
 %
 % GENERAL FIELDS AND SETTINGS
 %
