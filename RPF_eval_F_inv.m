@@ -26,16 +26,21 @@ function [x, xt, invMethod] = RPF_eval_F_inv(F, P, invMethod)
 
 %% check inputs
 
-P_at_x_min = RPF_eval_F(F, F.info.x_min);
-P_at_x_max = RPF_eval_F(F, F.info.x_max);
+if strcmp(F.info.fit_type, 'interp')
+    error('interpolated functions cannot be inverted')
 
-if any(min(P) < P_at_x_min) || any(max(P) > P_at_x_max)
-    warnText = ['In the input F struct, \n' ...
-                '- P at x min = ' regexprep(num2str(P_at_x_min', 2),   '\s+', ', ') '\n' ...
-                '- P at x max = ' regexprep(num2str(P_at_x_max', 2),   '\s+', ', ') '\n\n' ...
-                'Some of the input values for P exceed these bounds, which may cause ' ...
-                'numerical issues such as imaginary solutions for x.'];
-    warning('RPF:invalidInput', warnText);
+else    
+    P_at_x_min = RPF_eval_F(F, F.info.x_min);
+    P_at_x_max = RPF_eval_F(F, F.info.x_max);
+
+    if any(min(P) < P_at_x_min) || any(max(P) > P_at_x_max)
+        warnText = ['In the input F struct, \n' ...
+                    '- P at x min = ' regexprep(num2str(P_at_x_min', 2),   '\s+', ', ') '\n' ...
+                    '- P at x max = ' regexprep(num2str(P_at_x_max', 2),   '\s+', ', ') '\n\n' ...
+                    'Some of the input values for P exceed these bounds, which may cause ' ...
+                    'numerical issues such as imaginary solutions for x.'];
+        warning('RPF:numericalIssue', warnText);
+    end
 end
 
 %% determine inversion method

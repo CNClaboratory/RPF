@@ -8,14 +8,21 @@ function R = RPF_get_R(F1, F2, P1_LB, P1_UB)
 % F1    - an F struct holding details for the psychometric function P1 = F1(x).
 %         see RPF_guide('F')
 % F2    - same as F1, but for the function P2 = F2(x)
-% P1_LB - optional input specifying the lower bound of P1 for computing RPF
-%         AUC. Default value is the minimum possible, as stored in the
-%         output R.info.P1_LB_min. Note that if P1_LB < R.info.P1_LB_min, 
-%         P1_LB will be automatically set equal to R.info.P1_LB_min.
-% P1_UB - optional input specifying the upper bound of P1 for computing RPF
-%         AUC. Default value is the maximum possible, as stored in the
-%         output R.info.P1_UB_max. Note that if P1_UB > R.info.P1_UB_max, 
-%         P1_UB will be automatically set equal to R.info.P1_UB_max.
+% P1_LB - optional input specifying the lower bound of P1 for computing RPF AUC. 
+%       * DEFAULT value is the minimum possible, as stored in the output 
+%         R.info.P1_LB_min
+%         - note that if P1_LB < R.info.P1_LB_min, P1_LB will be automatically 
+%           set equal to R.info.P1_LB_min
+% P1_UB - optional input specifying the upper bound of P1 for computing RPF AUC. 
+%       * DEFAULT value is the maximum possible, as stored in the output 
+%         R.info.P1_UB_max
+%         - note that if P1_UB > R.info.P1_UB_max, P1_UB will be automatically 
+%           set equal to R.info.P1_UB_max
+%         - note that if F1 fits a response probability and R.info.P1_UB_max == 1,
+%           the default value of P1_UB is set to (1 - 1e-3) to prevent possible
+%           numerical issues when inverting F1. if you want to manually set
+%           P1_UB == 1, consider setting it to a value slightly lower than
+%           1 such as (1 - 1e-3) to avoid numerical issues
 % 
 % OUTPUTS
 % -------
@@ -167,6 +174,11 @@ elseif P1_UB <= R.info.P1_LB_min || P1_UB > R.info.P1_UB_max || P1_UB <= R.info.
 
 else
     R.info.P1_UB = P1_UB;
+end
+
+% adjust default value of P1_UB to avoid numerical issues
+if (~exist('P1_UB', 'var') || isempty(P1_UB)) && R.info.P1_UB == 1
+    R.info.P1_UB = 1 - 1e-3;
 end
 
 
