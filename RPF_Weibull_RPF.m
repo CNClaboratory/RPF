@@ -12,7 +12,7 @@ function P2 = RPF_Weibull_RPF(R, P1, filter_P1)
 %             being lower than F1(xt_min), being higher than F1(xt_max), or 
 %             being equal to 1 (or nearly so-- values within 1e-3 of 1 are 
 %             removed)
-%           * DEFAULT = 1
+%           * DEFAULT = 0
 %
 % OUTPUTS
 % -------
@@ -28,7 +28,7 @@ if ~exist('P1','var') || isempty(P1)
 end
 
 if ~exist('filter_P1','var') || isempty(filter_P1)
-    filter_P1 = 1;
+    filter_P1 = 0;
 end
 
 if filter_P1
