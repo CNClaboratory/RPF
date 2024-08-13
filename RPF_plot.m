@@ -32,6 +32,10 @@ function [h, plotSettings] = RPF_plot(F_or_R, plotSettings, PF_type)
 % * h            - a handle to the plot 
 % * plotSettings - the updated plotSettings struct used to make the plot
 
+if ~exist('plotSettings', 'var')
+    plotSettings = [];
+end
+
 switch F_or_R.info.PF_type
     case 'F(x)'
         F    = F_or_R;
