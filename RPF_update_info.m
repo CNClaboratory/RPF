@@ -271,8 +271,12 @@ end
 %% cond labels
 
 if ~isfield(info, 'cond_labels') || isempty(info.cond_labels)
-    for i_cond = 1:length(info.cond_vals)
-        info.cond_labels{i_cond} = ['cond = ' num2str(info.cond_vals(i_cond))];
+    if length(info.cond_vals) == 1
+        info.cond_labels{1} = 'cond = n/a';
+    else
+        for i_cond = 1:length(info.cond_vals)
+            info.cond_labels{i_cond} = ['cond = ' num2str(info.cond_vals(i_cond))];
+        end
     end
 end
 

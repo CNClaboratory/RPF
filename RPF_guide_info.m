@@ -241,7 +241,8 @@
 %     (e.g. {'attended', 'unattended'})
 %   - used by RPF_plot for the default legend setting
 %   - can also add clarity when working with variables in Matlab
-%   * DEFAULT is 'cond = C' for all values of C in info.cond_vals
+%   * DEFAULT is 'cond = C' for all values of C in info.cond_vals, or 
+%     'cond = n/a' if there are not multiple conditions
 % 
 % info.nRatings
 %   - number of ratings in the rating scale (e.g. for confidence,
