@@ -122,7 +122,7 @@ if sum(f_bad(2:end-1)) > 0
 end
 
 P1 = P1(f_bad == 0);
-for i_cond = R.info.nCond
+for i_cond = 1:R.info.nCond
     P2_f(i_cond, :) = P2(i_cond, f_bad == 0);
 end
 P2 = P2_f;
