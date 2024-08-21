@@ -184,7 +184,7 @@ end
 
 %% add AUC analysis to R.fit
 
-[AUC, P2_avg] = RPF_AUC(R);
+[AUC, P2_avg, P_data] = RPF_AUC(R);
 
 for i_cond = 1:length(F1.info.cond_vals)
     R.fit(i_cond).P1_at_x_min = R.info.P1_at_x_min(i_cond);
@@ -195,4 +195,6 @@ for i_cond = 1:length(F1.info.cond_vals)
     
     R.fit(i_cond).AUC    = AUC(i_cond);
     R.fit(i_cond).P2_avg = P2_avg(i_cond);
+    R.fit(i_cond).p_bad_samples = P_data.p_bad_samples;
+    R.fit(i_cond).n_bad_samples = P_data.n_bad_samples;
 end

@@ -150,17 +150,31 @@
 %   - upper bound of the P1 interval used to compute AUC
 %   - identical to R.info.P1_UB
 %
-% RPF.fit(i_cond).AUC
+% R.fit(i_cond).AUC
 %   - AUC of the RPF for the current condition over the maximal possible P1 
 %     range, i.e.  P1 range = [R.info.P1_LB, R.info.P1_UB]
 %   - computed by RPF_AUC
 % 
-% RPF.fit(i_cond).P2_avg
+% R.fit(i_cond).P2_avg
 %   - average P2 value for the current condition over the maximal possible 
 %     P1 range, i.e. P1 range = [R.info.P1_LB, R.info.P1_UB]
 %   - note that P2_avg = AUC / (P1_UB - P1_LB)
 %   - computed by RPF_AUC
 %
+% R.fit(i_cond).p_bad_samples
+%   - the proportion of P1 data samples that were omitted from calculation
+%     of RPF AUC in the RPF_AUC function due to bad (NaN, Inf, or imaginary) 
+%     P2 data occurring in any condition
+%   - this value should be 0 or very nearly so. if it's not, you should
+%     scrutinize the P_data output of RPF_AUC to identify any numerical
+%     issues arising in the calculation of RPF AUC for your R struct
+%   - identical to the p_bad_samples field of the P_data output of RPF_AUC
+%
+% R.fit(i_cond).n_bad_samples
+%   - the number of P1 data samples that were omitted from calculation
+%     of RPF AUC in the RPF_AUC function due to bad (NaN, Inf, or imaginary) 
+%     P2 data occurring in any condition
+%   - identical to the n_bad_samples field of the P_data output of RPF_AUC
 %
 % RPF INTERPOLATION
 %
