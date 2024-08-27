@@ -97,16 +97,24 @@ if ~exist('P1_grain', 'var') || isempty(P1_grain)
     P1_grain = 1e-5;
 end
 
+return_NaN = 0;
+
 if P1_LB < R.info.P1_LB_min
-    error('input P1_LB is less than R.info.P1_LB_min')
+    nanText = 'Input P1_LB is less than R.info.P1_LB_min! All outputs will be returned as NaN.';
+    warning('RPF:numericalIssue', nanText);
+    return_NaN = 1;
 end
 
 if P1_UB > R.info.P1_UB_max
-    error('input P1_UB is greater than R.info.P1_UB_max')
+    nanText = 'Input P1_UB is greater than R.info.P1_UB_max! All outputs will be returned as NaN.';
+    warning('RPF:numericalIssue', nanText);
+    return_NaN = 1;
 end
 
 if (P1_LB == P1_UB) || (P1_UB - P1_LB) < P1_grain
-    error('input P1_LB and P1_UB must differ by at least P1_grain')
+    nanText = 'Input P1_LB and P1_UB must differ by at least P1_grain! All outputs will be returned as NaN.';
+    warning('RPF:numericalIssue', nanText);
+    return_NaN = 1;
 end
 
 if any(strcmp(RPF_get_PF_list('PFs_respProb'), func2str(R.F1.info.PF))) && P1_UB >= 1
@@ -124,6 +132,33 @@ end
 % for interpolated RPFs, force method to be 'analytical'
 if isfield(R.info, 'PF') && isa(R.info.PF, 'function_handle') && strcmp(func2str(R.info.PF), 'RPF_interp_RPF')
     method = 'analytical';
+end
+
+
+%% return NaN outputs for bad input
+
+if return_NaN
+    AUC    = NaN(1, R.info.nCond);
+    P2_avg = NaN(1, R.info.nCond);
+    
+    P_data.P1_LB    = P1_LB;
+    P_data.P1_UB    = P1_UB;
+    P_data.P1_grain = P1_grain;
+    P_data.method   = method;
+
+    P_data.P1       = NaN;
+    P_data.P2       = NaN;
+    P_data.P1_f     = NaN;
+    P_data.P2_f     = NaN;
+
+    P_data.f_bad_i  = NaN;
+    P_data.f_bad    = NaN;
+    P_data.n_bad_samples = NaN;
+    P_data.p_bad_samples = NaN;
+
+    P_data.report   = nanText;
+
+    return
 end
 
 
