@@ -14,7 +14,7 @@ Please note that the RPF toolbox requires the following toolboxes:
 - [meta-d' toolbox](https://www.columbia.edu/~bsm2105/type2sdt/) (included in the `metad` folder of this repository)
 
 # Please cite this toolbox as related to the following publication
-(as of August 6, 2024; watch this space for updates to the preprint/publication)
+(as of September 2, 2024; watch this space for updates to the preprint/publication)
 
 Maniscalco, B., Castaneda, O. G., Odegaard, B., Morales, J., Rajananda, S., Denison, R., & Peters, M. A. K. (2024, September 2). The relative psychometric function: a general analysis framework for relating psychological processes. https://doi.org/10.31234/osf.io/5qrjn
 
