@@ -16,6 +16,6 @@ Please note that the RPF toolbox requires the following toolboxes:
 # Please cite this toolbox as related to the following publication
 (as of August 6, 2024; watch this space for updates to the preprint/publication)
 
-Maniscalco, B., Castaneda, O. G., Odegaard, B., Morales, J., Rajananda, S., & Peters, M. A. K. (2020, July 6). The metaperceptual function: Exploring dissociations between confidence and task performance with type 2 psychometric curves. https://doi.org/10.31234/osf.io/5qrjn
+Maniscalco, B., Castaneda, O. G., Odegaard, B., Morales, J., Rajananda, S., Denison, R., & Peters, M. A. K. (2024, September 2). The relative psychometric function: a general analysis framework for relating psychological processes. https://doi.org/10.31234/osf.io/5qrjn
 
 The RPF toolbox also depends on the Palamedes toolbox, so please ensure you also cite them according to instructions here: [https://www.palamedestoolbox.org/howtocite.html](https://www.palamedestoolbox.org/howtocite.html)
