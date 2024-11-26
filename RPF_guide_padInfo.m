@@ -55,7 +55,7 @@
 %   - identical to info.padCells_nonzero_d
 %
 % padInfo.nTrialsPerX_S1
-%   - the number trials per level of stimulus strength x for S1 stimuli
+%   - the number of trials per level of stimulus strength x for S1 stimuli
 %   - computed as the number of trials for which a valid response was
 %     recorded (as reflected in nR_S1) that is maximal across levels of x,
 %     i.e. nTrialsPerX_S1 = max( sum(nR_S1, 2) )

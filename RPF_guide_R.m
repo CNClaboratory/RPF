@@ -169,12 +169,18 @@
 %     scrutinize the P_data output of RPF_AUC to identify any numerical
 %     issues arising in the calculation of RPF AUC for your R struct
 %   - identical to the p_bad_samples field of the P_data output of RPF_AUC
+%   - note that it is not unusual for bad values to occur at the first or 
+%     last entries in the P_data.P2 array due to negligible numerical issues
+%   - see "help RPF_AUC" for more info
 %
 % R.fit(i_cond).n_bad_samples
 %   - the number of P1 data samples that were omitted from calculation
 %     of RPF AUC in the RPF_AUC function due to bad (NaN, Inf, or imaginary) 
 %     P2 data occurring in any condition
 %   - identical to the n_bad_samples field of the P_data output of RPF_AUC
+%   - note that it is not unusual for bad values to occur at the first or 
+%     last entries in the P_data.P2 array due to negligible numerical issues
+%   - see "help RPF_AUC" for more info
 %
 % RPF INTERPOLATION
 %
@@ -186,7 +192,7 @@
 % average of the P2 values across the original set of P1 duplicates. This
 % procedure yields the P1_sorted_unique and P2_sorted_unique fields
 % discussed below, which are used as "parameters" for the interpolation
-% similarly to how the RPF toolbox treat interpolation for F (see
+% similarly to how the RPF toolbox treats interpolation for F (see
 % RPF_guide('fit') section "Interpolation").
 % 
 % R.info.P1_data_min(i_cond) and R.info.P1_data_max(i_cond)

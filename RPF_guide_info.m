@@ -47,7 +47,8 @@
 %   * NO DEFAULT - must be defined manually
 %
 % info.PF_type 
-%   - a string describing whether this is an ordinary or relative PF
+%   - a string describing whether this is an ordinary PF (i.e. F(x)) or 
+%     relative PF (i.e. R(P1))
 %   - note that in most use cases, the user will only need to manually
 %     define the info struct for F(x), with the info struct for R being
 %     determined automatically by RPF_get_R
@@ -134,10 +135,10 @@
 %   - these values are used to define the default lower and upper bounds
 %     for the RPF P2 = R(P1) over which AUC can be computed for all conditions, 
 %     where the default lower bound of P1 is defined as the maximum across-
-%     condition value of P1 at x_min, and the default upper bound of P1 is 
-%     defined as the minimum across-condition value of P1 at x_max. these 
+%     condition value of P1 at info.x_min, and the default upper bound of P1 is 
+%     defined as the minimum across-condition value of P1 at info.x_max. these 
 %     values are stored in R.info.max_P1_at_x_min and R.info.min_P1_at_x_max, 
-%     respectively, in the R struct returned by RPF_get_R. 
+%     respectively, in the R struct returned by RPF_get_R.
 %   - info.x_min and info.x_max are also used to define the default lower
 %     and upper bounds of the plots of F1(x) and F2(x) in RPF_plot
 %   - setting info.x_min to a value greater than min(info.x_vals) and 
@@ -249,8 +250,8 @@
 %     awareness, etc.)
 %   - see RPF_guide('trialData') for more information on how rating values
 %     should be defined in the RPF toolbox
-%   * DEFAULT determined from trialData.rating. If there are no ratings,
-%     default value is 1.
+%   * DEFAULT is max(trialData.rating) after filtering out any Inf or NaN 
+%     values. If there are no ratings, default value is 1.
 %
 % info.constrain
 %   - struct specifying constraints (if any) to place on PF parameters when
@@ -264,6 +265,8 @@
 %     means fixed
 %   - e.g. paramsFree = [1 1 0 1] would indicate that gamma is fixed but
 %     all other parameters are free
+%   - value is determined from info.constrain using the RPF_get_paramsFree
+%     function
 %
 % info.searchGrid
 %   - struct specifying the searchGrid used to initialize parameter
@@ -280,6 +283,7 @@
 %
 % info.interp_method
 %   - interpolation method, as used by the Matlab function @interp1
+%   - see "help interp1" for listing of methods
 %   * DEFAULT value is 'linear'
 %
 % info.append_xP_min
@@ -391,6 +395,7 @@
 %   - this should be one of the PFs returned by RPF_get_PF_list('PFs_respProb')
 %   - this field is only applicable for MLE fitting of mean rating. it does
 %     not need to be specified for SSE fitting.
+%   - DEFAULT is @PAL_Weibull
 %
 % ----------------------
 % Fitting d' and meta-d'
@@ -569,7 +574,7 @@
 %     info.P_max and info.P_min to correspond to the max and min values
 %     possible with the specified padding settings. this can be achieved by
 %     declining to specify values for info.P_min and info.P_max, and insetad 
-%     setting info.set_P_max_to_pad_max == 1 and  info.set_P_max_to_pad_max 
+%     setting info.set_P_max_to_pad_max == 1 and info.set_P_max_to_pad_max 
 %     == 1, as noted above. 
 %
 %   - for meta-d' estimated with cell padding, you may also want to use

@@ -49,7 +49,7 @@ function [AUC, P2_avg, P_data] = RPF_AUC(R, P1_LB, P1_UB, P1_grain)
 % RPF_AUC function automatically prints a warning message to the Matlab prompt
 % detailing the nature of these issues. In such cases, the numerical issues
 % in question can be scrutinized more closely by inspecting the contents of
-% the optional output P_data.
+% the optional output P_data. 
 %
 % P_data - a struct containing information on the P1 and P2 data used to 
 %          compute RPF AUC, with the following fields:
@@ -82,6 +82,9 @@ function [AUC, P2_avg, P_data] = RPF_AUC(R, P1_LB, P1_UB, P1_grain)
 %
 %        using the filtered data P1_f and P2_f. if P1_f is empty, AUC for
 %        all conditions is set to NaN.
+%
+%        note that it is not unusual for bad values to occur at the first or 
+%        last entries in the P_data.P2 array due to negligible numerical issues.
 
 %% handle inputs
 

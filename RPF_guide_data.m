@@ -43,7 +43,7 @@
 %
 % data.P
 %   - a summary measure of the DV at each level of data.x
-%   - e.g. if info.DV is 'p(correct)', then data.P holds values of
+%   - e.g. if info.DV is 'p(correct)', then data(i_cond).P holds values of
 %     p(correct) at each level of data(i_cond).x
 %
 % RESPONSE-CONDITIONAL DVs
@@ -76,9 +76,9 @@
 % DV = mean rating
 % ----------------
 % data(i_cond).pHighRating(i_rating)
-%   - for each value of i_rating in [1, nRatings-1], contains information
-%     on the p(high rating) DV, where "high rating" is defined as rating >=
-%     (i_rating+1)
+%   - a struct containing information on the p(high rating) DV for each 
+%     value of i_rating in [1, nRatings-1], where "high rating" is defined 
+%     as rating >= (i_rating+1)
 %   - specifically, pHighRating(i_rating) contains fields P, forMLE.nPos, 
 %     and forMLE.nTot as these are defined for the p(high rating) DV
 %   - these data are used for MLE fitting of each p(high rating) curve,

@@ -24,6 +24,11 @@ function RPF_guide(query)
 % 'counts'       -> on the counts struct (used for SDT analysis)
 % 'padInfo'      -> on cell padding used for computing the counts struct
 % 'searchGrid'   -> on the searchGrid used in PF fitting
+%
+% To view the documentation for a given query in a file editor rather than 
+% the Matlab prompt, open the file "RPF_guide_(query).m". For instance, for
+% the query 'info', the documentation can be viewed in the file
+% "RPF_guide_info.m".
 
 if nargin == 0, query = ''; end
 

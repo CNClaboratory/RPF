@@ -199,7 +199,7 @@
 %
 % INTERPOLATION
 % -------------
-% The RPF toolbox treats interpolation as kind of "fit" to the data by
+% The RPF toolbox treats interpolation as a kind of "fit" to the data by
 % means of which a function P = F(x) can be defined and used to compute
 % AUC.
 %
