@@ -46,12 +46,11 @@
 % RPF_guide('R') for more on the F and R structs. 
 % 
 % RPF_eval_xt_fn
-%   - using the F struct, evaluate the x transform xt = xt_fn(x) for input
-%     xt
+%   - using the F struct, evaluate the x transform xt = xt_fn(x) for input x
 %
 % RPF_eval_xt_fn_inv
 %   - using the F struct, evaluate the x transform x = xt_fn_inv(xt) for
-%     input x
+%     input xt
 %   
 % RPF_eval_F
 %   - using the F struct, evaluate the psychometric functions P = F(xt) 
