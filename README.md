@@ -4,7 +4,7 @@ A toolbox for conducting relative psychometric function analysis.
 
 To get started using the toolbox, see the following files:
 
-- The function `RPF_guide` provides documentation and guidance for how to use the RPF toolbox
+- The function `RPF_guide` provides detailed documentation and guidance for how to use the RPF toolbox, including multiple embedded helper functions with directions for how to use the included functions
 - The scripts `RPF_example_simple` and `RPF_example_flexible` provide examples of data analysis using the toolbox
 
 Please note that the RPF toolbox requires the following toolboxes:
