@@ -285,6 +285,11 @@
 %   - interpolation method, as used by the Matlab function @interp1
 %   - see "help interp1" for listing of methods
 %   * DEFAULT value is 'linear'
+%   - EXCEPTION to using @interp1 is if 'isotonic' is selected as the
+%     interpolation method. In this case, isotonic regression is performed
+%     using the PAVA method (called via RPF_interp_isotonic.m) and then
+%     linear interpolation is performed on the isotonic-regression fits to
+%     compute the RPF and its derivatives.
 %
 % info.append_xP_min
 %   - boolean controlling whether to append (info.x_min, info.P_min) to the
