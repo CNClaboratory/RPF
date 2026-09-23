@@ -56,8 +56,10 @@ While these toolboxes are not necessary for *every* way of using the RPF toolbox
 To check if the RPF toolbox can detect the presence of these supporting toolboxes in your setup, use the function `RPF_check_toolboxes`.
 
 ## Please cite this toolbox as related to the following publications
-(as of September 2, 2024; watch this space for updates to the preprint/publication)
+(as of September 23, 2026; watch this space for updates to the publication issue when available)
 
-Maniscalco, B., Castaneda, O. G., Odegaard, B., Morales, J., Rajananda, S., Denison, R., & Peters, M. A. K. (2024, September 2). The relative psychometric function: a general analysis framework for relating psychological processes. https://doi.org/10.31234/osf.io/5qrjn
+Maniscalco, B., Graham Castaneda, O., Odegaard, B., Morales, J., Rajananda, S., Denison, R. N., & Peters, M. A. K. (2026). The relative psychometric function: A general analysis framework for relating psychological processes. Psychological Review. Advance online publication. https://doi.org/10.1037/rev0000625
+
+Publication URL: [https://psycnet.apa.org/record/2027-83723-001](https://psycnet.apa.org/record/2027-83723-001)
 
 The RPF toolbox also depends on the Palamedes toolbox, so please ensure you also cite them according to instructions here: [https://www.palamedestoolbox.org/howtocite.html](https://www.palamedestoolbox.org/howtocite.html)
